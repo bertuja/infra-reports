@@ -1,14 +1,5 @@
 [
   {
-    "id": "2026-04-28-estado-infraestructura-abril-ejecutivo",
-    "title": "Estado Infraestructura Abril — Ejecutivo",
-    "client": "Presis Postal",
-    "type": "ejecutivo",
-    "date": "2026-04-28",
-    "file": "2026-04-28-estado-infraestructura-abril-ejecutivo.html",
-    "description": "Dashboard ejecutivo: métricas ALB, EC2, RDS y semáforos por componente. Últimos 30 días."
-  },
-  {
     "id": "2026-04-28-estado-infraestructura-abril-tecnico",
     "title": "Estado Infraestructura Abril — Técnico",
     "client": "Presis Postal",
@@ -16,5 +7,14 @@
     "date": "2026-04-28",
     "file": "2026-04-28-estado-infraestructura-abril-tecnico.html",
     "description": "Reporte técnico completo: stack, PHP-FPM pools, ALB routing, incidente 10/04, DiskQueueDepth RDS, alarmas CloudWatch."
+  },
+  {
+    "id": "2026-04-28-estado-infraestructura-abril-ejecutivo",
+    "title": "Estado Infraestructura Abril — Ejecutivo",
+    "client": "Presis Postal",
+    "type": "ejecutivo",
+    "date": "2026-04-28",
+    "file": "2026-04-28-estado-infraestructura-abril-ejecutivo.html",
+    "description": "Dashboard completo: 4 instancias, 3 bases de datos, workers PHP-FPM, ALB health checks corregidos. Todas las instancias en healthy."
   }
 ]
