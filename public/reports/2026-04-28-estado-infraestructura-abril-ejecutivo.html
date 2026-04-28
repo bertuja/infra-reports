@@ -46,9 +46,12 @@ body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif
 
 /* INSTANCE CARDS */
 .instances-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--gap); margin-bottom:var(--gap); }
-.inst-card { background:var(--card); border-radius:var(--r); padding:20px 22px; box-shadow:0 1px 4px rgba(0,0,0,.07); }
+.inst-card { background:var(--card); border-radius:var(--r); box-shadow:0 1px 4px rgba(0,0,0,.07); overflow:hidden; }
+.inst-color-bar { height:5px; width:100%; }
+.inst-body { padding:18px 20px; }
 .inst-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid #f0f0f0; }
-.inst-name { font-size:15px; font-weight:700; color:var(--text); }
+.inst-name { font-size:15px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:8px; }
+.inst-tag { font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; color:#fff; }
 .inst-type { font-size:11px; color:var(--dim); margin-top:2px; }
 .badge { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; }
 .badge.ok { background:#e8f5e9; color:#2e7d32; }
@@ -69,11 +72,16 @@ body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif
 .metric-val.warn { color:var(--yellow); }
 .metric-val.crit { color:var(--red); }
 
+/* DB CONNECTOR */
+.db-connector { display:flex; align-items:center; justify-content:center; margin:10px 0 8px; gap:6px; }
+.db-connector-line { flex:1; height:1px; border-top:2px dashed; opacity:.35; }
+.db-connector-label { font-size:10px; font-weight:700; padding:2px 10px; border-radius:10px; color:#fff; white-space:nowrap; }
+
 /* DB SECTION */
-.db-section { background:#f8faff; border:1px solid #e3eaf5; border-radius:7px; padding:12px 14px; }
+.db-section { border:2px solid; border-radius:8px; padding:12px 14px; }
 .db-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
 .db-icon { font-size:14px; }
-.db-name { font-size:12px; font-weight:700; color:#1565c0; }
+.db-name { font-size:12px; font-weight:700; }
 .db-engine { font-size:10px; color:var(--dim); margin-left:auto; }
 .db-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 .db-metric { text-align:center; }
@@ -178,247 +186,264 @@ footer { text-align:center; font-size:11px; color:var(--dim); padding:16px; marg
 
 <!-- INSTANCIAS -->
 <div class="stitle">Instancias y bases de datos</div>
+
+<!-- LEYENDA DE COLORES -->
+<div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+  <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;"><div style="width:12px;height:12px;border-radius:3px;background:#1e88e5"></div>ePresis Postal</div>
+  <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;"><div style="width:12px;height:12px;border-radius:3px;background:#f57c00"></div>Bluemail Nacional</div>
+  <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;"><div style="width:12px;height:12px;border-radius:3px;background:#00897b"></div>Bluemail Internacional</div>
+  <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;"><div style="width:12px;height:12px;border-radius:3px;background:#7b1fa2"></div>Desarrollo</div>
+</div>
+
 <div class="instances-grid">
 
-  <!-- ePresis Postal -->
+  <!-- ePresis Postal — AZUL -->
   <div class="inst-card">
-    <div class="inst-header">
-      <div>
-        <div class="inst-name">ePresis Postal</div>
-        <div class="inst-type">c7g.xlarge · 4 vCPU · 8 GB RAM · us-east-1b</div>
-        <div class="inst-type" style="margin-top:2px;color:#888">bluepostal.epresis.com</div>
-      </div>
-      <span class="badge ok"><span class="dot ok"></span>Healthy</span>
-    </div>
-    <div class="metrics-row">
-      <div class="metric-item">
-        <div class="metric-lbl">CPU avg 30d</div>
-        <div class="metric-val ok">1.7%</div>
-        <div class="metric-sub">pico: 19.4%</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-lbl">RAM usada</div>
-        <div class="metric-val ok">27%</div>
-        <div class="metric-sub">2.1 GB / 7.6 GB</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-lbl">Disco</div>
-        <div class="metric-val warn">64%</div>
-        <div class="metric-sub">12 GB / 19 GB</div>
-      </div>
-    </div>
-    <div class="bar-wrap" style="margin-bottom:6px;">
-      <div class="bar-lbl"><span>Workers PHP-FPM (php8.1)</span><span style="color:#22c55e;font-weight:600">22% — 9 / 40 activos</span></div>
-      <div class="bar-track"><div class="bar-fill fill-g" style="width:22%"></div></div>
-    </div>
-    <div class="bar-wrap" style="margin-bottom:12px;">
-      <div class="bar-lbl"><span>Queue workers (artisan)</span><span style="color:var(--dim)">16 procesos · load avg: 0.05</span></div>
-      <div class="bar-track"><div class="bar-fill fill-b" style="width:40%"></div></div>
-    </div>
-    <div class="db-section">
-      <div class="db-header">
-        <span class="db-icon">🗄️</span>
-        <span class="db-name">postal-db-1</span>
-        <span class="db-engine">Aurora MySQL 8.0 · db.t4g.medium · 2vCPU · 4GB RAM</span>
-      </div>
-      <div class="db-metrics">
-        <div class="db-metric">
-          <div class="v" style="color:#f0a500">11.3%</div>
-          <div class="l">CPU avg</div>
+    <div class="inst-color-bar" style="background:#1e88e5"></div>
+    <div class="inst-body">
+      <div class="inst-header">
+        <div>
+          <div class="inst-name">
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#1e88e5"></span>
+            ePresis Postal
+            <span class="inst-tag" style="background:#1e88e5">PRD</span>
+          </div>
+          <div class="inst-type">c7g.xlarge · 4 vCPU · 8 GB · us-east-1b</div>
+          <div class="inst-type" style="color:#888">bluepostal.epresis.com</div>
         </div>
-        <div class="db-metric">
-          <div class="v" style="color:#f0a500">1.00 GB</div>
-          <div class="l">RAM libre avg</div>
+        <span class="badge ok"><span class="dot ok"></span>Healthy</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric-item">
+          <div class="metric-lbl">CPU avg 30d</div>
+          <div class="metric-val ok">1.7%</div>
+          <div class="metric-sub">pico: 19.4%</div>
         </div>
-        <div class="db-metric">
-          <div class="v" style="color:#22c55e">12 / 90</div>
-          <div class="l">Conexiones</div>
+        <div class="metric-item">
+          <div class="metric-lbl">RAM usada</div>
+          <div class="metric-val ok">27%</div>
+          <div class="metric-sub">2.1 / 7.6 GB</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-lbl">Workers FPM</div>
+          <div class="metric-val ok">9 / 40</div>
+          <div class="metric-sub">22% · php8.1</div>
         </div>
       </div>
-      <div class="bar-wrap" style="margin-top:10px;">
-        <div class="bar-lbl"><span>RAM libre</span><span style="color:#f0a500;font-weight:600">75% en uso · mín: 0.92 GB</span></div>
-        <div class="bar-track"><div class="bar-fill fill-y" style="width:75%"></div></div>
+      <div class="bar-wrap" style="margin-bottom:4px;">
+        <div class="bar-lbl"><span>Workers activos</span><span style="color:#22c55e;font-weight:600">22%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:22%;background:#1e88e5"></div></div>
+      </div>
+      <!-- CONECTOR -->
+      <div class="db-connector">
+        <div class="db-connector-line" style="border-color:#1e88e5"></div>
+        <div class="db-connector-label" style="background:#1e88e5">🗄️ Base de datos exclusiva</div>
+        <div class="db-connector-line" style="border-color:#1e88e5"></div>
+      </div>
+      <!-- RDS -->
+      <div class="db-section" style="border-color:#1e88e540;background:#e3f2fd20;">
+        <div class="db-header">
+          <span class="db-name" style="color:#1e88e5">postal-db-1</span>
+          <span class="db-engine">Aurora MySQL 8.0 · db.t4g.medium · 4GB RAM</span>
+        </div>
+        <div class="db-metrics">
+          <div class="db-metric"><div class="v" style="color:#f0a500">11.3%</div><div class="l">CPU avg</div></div>
+          <div class="db-metric"><div class="v" style="color:#f0a500">1.00 GB</div><div class="l">RAM libre avg</div></div>
+          <div class="db-metric"><div class="v" style="color:#22c55e">12 / 90</div><div class="l">Conexiones</div></div>
+        </div>
+        <div class="bar-wrap" style="margin-top:8px;">
+          <div class="bar-lbl"><span>RAM en uso</span><span style="color:#f0a500;font-weight:600">75% · mín: 0.92 GB</span></div>
+          <div class="bar-track"><div class="bar-fill fill-y" style="width:75%"></div></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Bluemail Nacional -->
+  <!-- Bluemail Nacional — NARANJA -->
   <div class="inst-card">
-    <div class="inst-header">
-      <div>
-        <div class="inst-name">Bluemail Nacional</div>
-        <div class="inst-type">c7g.xlarge · 4 vCPU · 8 GB RAM · us-east-1a</div>
-        <div class="inst-type" style="margin-top:2px;color:#888">Default ALB target</div>
-      </div>
-      <span class="badge ok"><span class="dot ok"></span>Healthy</span>
-    </div>
-    <div class="metrics-row">
-      <div class="metric-item">
-        <div class="metric-lbl">CPU avg 30d</div>
-        <div class="metric-val warn">4.3%</div>
-        <div class="metric-sub">pico: <strong style="color:#dc3545">98.9%</strong></div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-lbl">RAM usada</div>
-        <div class="metric-val ok">34%</div>
-        <div class="metric-sub">2.6 GB / 7.6 GB</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-lbl">Load avg</div>
-        <div class="metric-val ok">0.21</div>
-        <div class="metric-sub">carga normal</div>
-      </div>
-    </div>
-    <div class="bar-wrap" style="margin-bottom:6px;">
-      <div class="bar-lbl"><span>Workers PHP-FPM (php8.1)</span><span style="color:#22c55e;font-weight:600">33% — 16 / 48 activos</span></div>
-      <div class="bar-track"><div class="bar-fill fill-g" style="width:33%"></div></div>
-    </div>
-    <div class="bar-wrap" style="margin-bottom:12px;">
-      <div class="bar-lbl"><span>Queue workers (artisan)</span><span style="color:var(--dim)">17 procesos</span></div>
-      <div class="bar-track"><div class="bar-fill fill-b" style="width:35%"></div></div>
-    </div>
-    <div class="db-section">
-      <div class="db-header">
-        <span class="db-icon">🗄️</span>
-        <span class="db-name">blue-rds</span>
-        <span class="db-engine">MySQL 8.4.7 · db.t4g.medium · 2vCPU · 4GB RAM · 100GB gp2</span>
-      </div>
-      <div class="db-metrics">
-        <div class="db-metric">
-          <div class="v" style="color:#f0a500">12.2%</div>
-          <div class="l">CPU avg</div>
+    <div class="inst-color-bar" style="background:#f57c00"></div>
+    <div class="inst-body">
+      <div class="inst-header">
+        <div>
+          <div class="inst-name">
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f57c00"></span>
+            Bluemail Nacional
+            <span class="inst-tag" style="background:#f57c00">PRD</span>
+          </div>
+          <div class="inst-type">c7g.xlarge · 4 vCPU · 8 GB · us-east-1a</div>
+          <div class="inst-type" style="color:#888">bluemail.epresis.com</div>
         </div>
-        <div class="db-metric">
-          <div class="v" style="color:#dc3545">0.65 GB</div>
-          <div class="l">RAM libre avg</div>
+        <span class="badge ok"><span class="dot ok"></span>Healthy</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric-item">
+          <div class="metric-lbl">CPU avg 30d</div>
+          <div class="metric-val warn">4.3%</div>
+          <div class="metric-sub">pico: <strong style="color:#dc3545">98.9%</strong></div>
         </div>
-        <div class="db-metric">
-          <div class="v" style="color:#f0a500">29 / 90</div>
-          <div class="l">Conexiones avg</div>
+        <div class="metric-item">
+          <div class="metric-lbl">RAM usada</div>
+          <div class="metric-val ok">34%</div>
+          <div class="metric-sub">2.6 / 7.6 GB</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-lbl">Workers FPM</div>
+          <div class="metric-val ok">16 / 48</div>
+          <div class="metric-sub">33% · php8.1</div>
         </div>
       </div>
-      <div class="bar-wrap" style="margin-top:10px;">
-        <div class="bar-lbl"><span>RAM libre</span><span style="color:#dc3545;font-weight:600">Crítico — mín: 0.25 GB</span></div>
-        <div class="bar-track"><div class="bar-fill fill-r" style="width:84%"></div></div>
+      <div class="bar-wrap" style="margin-bottom:4px;">
+        <div class="bar-lbl"><span>Workers activos</span><span style="color:#22c55e;font-weight:600">33%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:33%;background:#f57c00"></div></div>
       </div>
-      <div class="bar-wrap" style="margin-top:6px;">
-        <div class="bar-lbl"><span>Conexiones pico</span><span style="color:#f0a500;font-weight:600">82 / 90 (91%)</span></div>
-        <div class="bar-track"><div class="bar-fill fill-r" style="width:91%"></div></div>
+      <!-- CONECTOR -->
+      <div class="db-connector">
+        <div class="db-connector-line" style="border-color:#f57c00"></div>
+        <div class="db-connector-label" style="background:#f57c00">🗄️ Base de datos primaria</div>
+        <div class="db-connector-line" style="border-color:#f57c00"></div>
+      </div>
+      <!-- RDS -->
+      <div class="db-section" style="border-color:#f57c0040;background:#fff3e020;">
+        <div class="db-header">
+          <span class="db-name" style="color:#f57c00">blue-rds</span>
+          <span class="db-engine">MySQL 8.4.7 · db.t4g.medium · 4GB RAM · 100GB gp2</span>
+        </div>
+        <div class="db-metrics">
+          <div class="db-metric"><div class="v" style="color:#f0a500">12.2%</div><div class="l">CPU avg</div></div>
+          <div class="db-metric"><div class="v" style="color:#dc3545">0.65 GB</div><div class="l">RAM libre avg</div></div>
+          <div class="db-metric"><div class="v" style="color:#f0a500">29 / 90</div><div class="l">Conex. avg</div></div>
+        </div>
+        <div class="bar-wrap" style="margin-top:8px;">
+          <div class="bar-lbl"><span>RAM en uso</span><span style="color:#dc3545;font-weight:600">⚠ mín: 0.25 GB — crítico</span></div>
+          <div class="bar-track"><div class="bar-fill fill-r" style="width:84%"></div></div>
+        </div>
+        <div class="bar-wrap" style="margin-top:4px;">
+          <div class="bar-lbl"><span>Conexiones pico</span><span style="color:#f0a500;font-weight:600">82 / 90 (91%)</span></div>
+          <div class="bar-track"><div class="bar-fill fill-r" style="width:91%"></div></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Bluemail Internacional -->
+  <!-- Bluemail Internacional — TEAL -->
   <div class="inst-card">
-    <div class="inst-header">
-      <div>
-        <div class="inst-name">Bluemail Internacional</div>
-        <div class="inst-type">t4g.medium · 2 vCPU · 4 GB RAM · us-east-1b</div>
-        <div class="inst-type" style="margin-top:2px;color:#888">bluemail-inter.epresis.com</div>
-      </div>
-      <span class="badge ok"><span class="dot ok"></span>Healthy</span>
-    </div>
-    <div class="metrics-row">
-      <div class="metric-item">
-        <div class="metric-lbl">CPU avg 30d</div>
-        <div class="metric-val ok">2.5%</div>
-        <div class="metric-sub">pico: <strong style="color:#dc3545">98.9%</strong></div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-lbl">RAM usada</div>
-        <div class="metric-val ok">27%</div>
-        <div class="metric-sub">1.0 GB / 3.7 GB</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-lbl">Load avg</div>
-        <div class="metric-val ok">0.00</div>
-        <div class="metric-sub">sin carga activa</div>
-      </div>
-    </div>
-    <div class="bar-wrap" style="margin-bottom:6px;">
-      <div class="bar-lbl"><span>Workers PHP-FPM (php8.2)</span><span style="color:#22c55e;font-weight:600">25% — 5 / 20 activos</span></div>
-      <div class="bar-track"><div class="bar-fill fill-g" style="width:25%"></div></div>
-    </div>
-    <div class="bar-wrap" style="margin-bottom:6px;">
-      <div class="bar-lbl"><span>Queue workers (artisan)</span><span style="color:#f0a500;font-weight:600">18 procesos · t4g.medium 4GB</span></div>
-      <div class="bar-track"><div class="bar-fill fill-y" style="width:45%"></div></div>
-    </div>
-    <div style="background:#e8f5e9;border-radius:6px;padding:8px 10px;font-size:11px;color:#2e7d32;margin-bottom:12px;">
-      ✅ max_children actualizado 10→20 · max_requests=500 · terminate_timeout=60s
-    </div>
-    <div class="db-section">
-      <div class="db-header">
-        <span class="db-icon">🗄️</span>
-        <span class="db-name">replica-blue</span>
-        <span class="db-engine">MySQL 8.4.7 · db.t4g.medium · 2vCPU · 4GB RAM · 222GB gp2</span>
-      </div>
-      <div class="db-metrics">
-        <div class="db-metric">
-          <div class="v" style="color:#22c55e">4.0%</div>
-          <div class="l">CPU avg</div>
+    <div class="inst-color-bar" style="background:#00897b"></div>
+    <div class="inst-body">
+      <div class="inst-header">
+        <div>
+          <div class="inst-name">
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#00897b"></span>
+            Bluemail Internacional
+            <span class="inst-tag" style="background:#00897b">PRD</span>
+          </div>
+          <div class="inst-type">t4g.medium · 2 vCPU · 4 GB · us-east-1b</div>
+          <div class="inst-type" style="color:#888">bluemail-inter.epresis.com</div>
         </div>
-        <div class="db-metric">
-          <div class="v" style="color:#f0a500">0.95 GB</div>
-          <div class="l">RAM libre avg</div>
+        <span class="badge ok"><span class="dot ok"></span>Healthy</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric-item">
+          <div class="metric-lbl">CPU avg 30d</div>
+          <div class="metric-val ok">2.5%</div>
+          <div class="metric-sub">pico: <strong style="color:#dc3545">98.9%</strong></div>
         </div>
-        <div class="db-metric">
-          <div class="v" style="color:#22c55e">~0</div>
-          <div class="l">Conexiones</div>
+        <div class="metric-item">
+          <div class="metric-lbl">RAM usada</div>
+          <div class="metric-val ok">27%</div>
+          <div class="metric-sub">1.0 / 3.7 GB</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-lbl">Workers FPM</div>
+          <div class="metric-val ok">5 / 20</div>
+          <div class="metric-sub">25% · php8.2</div>
         </div>
       </div>
-      <div class="bar-wrap" style="margin-top:10px;">
-        <div class="bar-lbl"><span>RAM libre</span><span style="color:#f0a500;font-weight:600">76% en uso · mín: 0.63 GB</span></div>
-        <div class="bar-track"><div class="bar-fill fill-y" style="width:76%"></div></div>
+      <div class="bar-wrap" style="margin-bottom:4px;">
+        <div class="bar-lbl"><span>Workers activos</span><span style="color:#22c55e;font-weight:600">25%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:25%;background:#00897b"></div></div>
+      </div>
+      <!-- CONECTOR -->
+      <div class="db-connector">
+        <div class="db-connector-line" style="border-color:#00897b"></div>
+        <div class="db-connector-label" style="background:#00897b">🗄️ Réplica de lectura</div>
+        <div class="db-connector-line" style="border-color:#00897b"></div>
+      </div>
+      <!-- RDS -->
+      <div class="db-section" style="border-color:#00897b40;background:#e0f2f120;">
+        <div class="db-header">
+          <span class="db-name" style="color:#00897b">replica-blue</span>
+          <span class="db-engine">MySQL 8.4.7 · db.t4g.medium · 4GB RAM · 222GB gp2</span>
+        </div>
+        <div class="db-metrics">
+          <div class="db-metric"><div class="v" style="color:#22c55e">4.0%</div><div class="l">CPU avg</div></div>
+          <div class="db-metric"><div class="v" style="color:#f0a500">0.95 GB</div><div class="l">RAM libre avg</div></div>
+          <div class="db-metric"><div class="v" style="color:#22c55e">~0</div><div class="l">Conexiones</div></div>
+        </div>
+        <div class="bar-wrap" style="margin-top:8px;">
+          <div class="bar-lbl"><span>RAM en uso</span><span style="color:#f0a500;font-weight:600">76% · mín: 0.63 GB</span></div>
+          <div class="bar-track"><div class="bar-fill fill-y" style="width:76%"></div></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Desarrollo -->
+  <!-- Desarrollo — VIOLETA -->
   <div class="inst-card">
-    <div class="inst-header">
-      <div>
-        <div class="inst-name">Desarrollo (Nac. e Inter.)</div>
-        <div class="inst-type">t4g.small · 2 vCPU · 2 GB RAM · us-east-1a</div>
-        <div class="inst-type" style="margin-top:2px;color:#888">*.epresisdemo.com</div>
+    <div class="inst-color-bar" style="background:#7b1fa2"></div>
+    <div class="inst-body">
+      <div class="inst-header">
+        <div>
+          <div class="inst-name">
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#7b1fa2"></span>
+            Desarrollo
+            <span class="inst-tag" style="background:#7b1fa2">DEV</span>
+          </div>
+          <div class="inst-type">t4g.small · 2 vCPU · 2 GB · us-east-1a</div>
+          <div class="inst-type" style="color:#888">*.epresisdemo.com</div>
+        </div>
+        <span class="badge ok"><span class="dot ok"></span>Healthy</span>
       </div>
-      <span class="badge ok"><span class="dot ok"></span>Healthy</span>
-    </div>
-    <div class="metrics-row">
-      <div class="metric-item">
-        <div class="metric-lbl">CPU avg 30d</div>
-        <div class="metric-val ok">1.3%</div>
-        <div class="metric-sub">pico: 39.1%</div>
+      <div class="metrics-row">
+        <div class="metric-item">
+          <div class="metric-lbl">CPU avg 30d</div>
+          <div class="metric-val ok">1.3%</div>
+          <div class="metric-sub">pico: 39.1%</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-lbl">RAM usada</div>
+          <div class="metric-val warn">50%</div>
+          <div class="metric-sub">913 MB / 1.8 GB</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-lbl">Workers FPM</div>
+          <div class="metric-val warn">9 / 15</div>
+          <div class="metric-sub">60% · php8.1</div>
+        </div>
       </div>
-      <div class="metric-item">
-        <div class="metric-lbl">RAM usada</div>
-        <div class="metric-val warn">50%</div>
-        <div class="metric-sub">913 MB / 1.8 GB</div>
+      <div class="bar-wrap" style="margin-bottom:4px;">
+        <div class="bar-lbl"><span>Workers activos</span><span style="color:#f0a500;font-weight:600">60%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%;background:#7b1fa2"></div></div>
       </div>
-      <div class="metric-item">
-        <div class="metric-lbl">Ambiente</div>
-        <div class="metric-val" style="color:var(--dim)">Dev</div>
-        <div class="metric-sub">no productivo</div>
+      <!-- CONECTOR -->
+      <div class="db-connector">
+        <div class="db-connector-line" style="border-color:#7b1fa2"></div>
+        <div class="db-connector-label" style="background:#7b1fa2">🗄️ Base de datos compartida</div>
+        <div class="db-connector-line" style="border-color:#7b1fa2"></div>
       </div>
-    </div>
-    <div class="bar-wrap" style="margin-bottom:6px;">
-      <div class="bar-lbl"><span>Workers PHP-FPM (php8.1)</span><span style="color:#f0a500;font-weight:600">60% — 9 / 15 activos</span></div>
-      <div class="bar-track"><div class="bar-fill fill-y" style="width:60%"></div></div>
-    </div>
-    <div class="bar-wrap" style="margin-bottom:6px;">
-      <div class="bar-lbl"><span>RAM disponible</span><span style="color:#f0a500;font-weight:600">113 MB libres — instancia pequeña</span></div>
-      <div class="bar-track"><div class="bar-fill fill-y" style="width:50%"></div></div>
-    </div>
-    <div style="background:#e8f5e9;border-radius:6px;padding:8px 10px;font-size:11px;color:#2e7d32;margin-bottom:12px;">
-      ✅ SSM instalado · healthcheck nginx agregado · ALB protocolo corregido HTTP
-    </div>
-    <div class="db-section">
-      <div class="db-header">
-        <span class="db-icon">🗄️</span>
-        <span class="db-name">blue-rds (compartida)</span>
-        <span class="db-engine">Misma instancia que Nacional</span>
-      </div>
-      <div style="font-size:11px;color:var(--dim);margin-top:4px;">
-        El ambiente de desarrollo comparte la base de datos MySQL con el entorno Nacional. Esto implica riesgo de impacto cruzado entre ambientes.
+      <!-- RDS compartida -->
+      <div class="db-section" style="border-color:#7b1fa240;background:#f3e5f520;">
+        <div class="db-header">
+          <span class="db-name" style="color:#7b1fa2">blue-rds</span>
+          <span class="db-engine">Compartida con Bluemail Nacional</span>
+        </div>
+        <div class="db-metrics">
+          <div class="db-metric"><div class="v" style="color:#f0a500">12.2%</div><div class="l">CPU avg</div></div>
+          <div class="db-metric"><div class="v" style="color:#dc3545">0.25 GB</div><div class="l">RAM libre mín</div></div>
+          <div class="db-metric"><div class="v" style="color:#f0a500">82 / 90</div><div class="l">Conex. pico</div></div>
+        </div>
+        <div style="margin-top:8px;background:#fff3e0;border-radius:5px;padding:7px 10px;font-size:11px;color:#e65100;">
+          ⚠️ Dev y Producción comparten esta DB — riesgo de impacto cruzado
+        </div>
       </div>
     </div>
   </div>

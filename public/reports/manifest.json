@@ -15,6 +15,6 @@
     "type": "ejecutivo",
     "date": "2026-04-28",
     "file": "2026-04-28-estado-infraestructura-abril-ejecutivo.html",
-    "description": "Dashboard completo: 4 instancias, 3 bases de datos, workers PHP-FPM, ALB health checks corregidos. Todas las instancias en healthy."
+    "description": "Dashboard completo: 4 instancias color-coded con sus bases de datos vinculadas, workers PHP-FPM, ALB 4/4 healthy."
   }
 ]
