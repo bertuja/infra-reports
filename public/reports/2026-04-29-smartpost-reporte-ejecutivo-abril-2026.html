@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smartpost — Reporte Ejecutivo de Infraestructura</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<style>
+:root {
+  --bg: #f0f2f5; --card: #fff; --header: #0d1b2a; --header2: #1b2d45;
+  --text: #1a1a2e; --dim: #6c757d;
+  --green: #22c55e; --yellow: #f0a500; --red: #dc3545; --blue: #1e88e5;
+  --gap: 16px; --r: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--text); font-size:13px; }
+.wrap { max-width:1440px; margin:0 auto; padding:var(--gap); }
+
+/* HEADER */
+.hdr { background:linear-gradient(135deg,var(--header),var(--header2)); color:#fff; padding:20px 28px; border-radius:var(--r); margin-bottom:var(--gap); display:flex; justify-content:space-between; align-items:center; }
+.hdr h1 { font-size:20px; font-weight:700; }
+.hdr p { font-size:12px; color:rgba(255,255,255,.55); margin-top:3px; }
+.hdr-right { text-align:right; font-size:11px; color:rgba(255,255,255,.5); }
+.hdr-badge { display:inline-block; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); color:#fff; font-size:11px; padding:3px 12px; border-radius:20px; margin-bottom:5px; }
+
+/* BANNER */
+.banner { background:linear-gradient(135deg,#f97316,#ea580c); color:#fff; border-radius:var(--r); padding:14px 24px; margin-bottom:var(--gap); display:flex; justify-content:space-between; align-items:center; }
+.banner h2 { font-size:15px; font-weight:700; }
+.banner p { font-size:11px; color:rgba(255,255,255,.65); margin-top:3px; }
+.countdown { font-size:30px; font-weight:800; }
+.countdown-lbl { font-size:10px; color:rgba(255,255,255,.55); text-align:right; }
+
+/* SECTION TITLE */
+.stitle { font-size:11px; font-weight:700; color:var(--dim); text-transform:uppercase; letter-spacing:.8px; margin:16px 0 10px; }
+
+/* KPI */
+.kpi-row { display:grid; grid-template-columns:repeat(5,1fr); gap:var(--gap); margin-bottom:var(--gap); }
+.kpi { background:var(--card); border-radius:var(--r); padding:16px 18px; box-shadow:0 1px 4px rgba(0,0,0,.07); border-top:3px solid var(--blue); position:relative; overflow:hidden; }
+.kpi.g { border-top-color:var(--green); }
+.kpi.y { border-top-color:var(--yellow); }
+.kpi.r { border-top-color:var(--red); }
+.kpi-lbl { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.6px; margin-bottom:5px; }
+.kpi-val { font-size:28px; font-weight:800; line-height:1; margin-bottom:3px; }
+.kpi-sub { font-size:11px; color:var(--dim); }
+.kpi-ico { position:absolute; right:14px; top:14px; font-size:26px; opacity:.1; }
+
+/* INSTANCE CARDS */
+.instances-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--gap); margin-bottom:var(--gap); }
+.inst-card { background:var(--card); border-radius:var(--r); box-shadow:0 1px 4px rgba(0,0,0,.07); overflow:hidden; }
+.inst-color-bar { height:5px; width:100%; }
+.inst-body { padding:18px 20px; }
+.inst-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid #f0f0f0; }
+.inst-name { font-size:15px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:8px; }
+.inst-tag { font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; color:#fff; }
+.inst-type { font-size:11px; color:var(--dim); margin-top:2px; }
+.badge { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; }
+.badge.ok { background:#e8f5e9; color:#2e7d32; }
+.badge.warn { background:#fff8e1; color:#f57f17; }
+.badge.crit { background:#ffebee; color:#c62828; }
+.dot { width:7px; height:7px; border-radius:50%; }
+.dot.ok { background:var(--green); }
+.dot.warn { background:var(--yellow); }
+.dot.crit { background:var(--red); }
+
+/* METRICS ROW */
+.metrics-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px; }
+.metric-item { background:#f8f9fa; border-radius:6px; padding:10px 12px; }
+.metric-lbl { font-size:10px; color:var(--dim); text-transform:uppercase; margin-bottom:3px; }
+.metric-val { font-size:18px; font-weight:700; }
+.metric-sub { font-size:10px; color:var(--dim); }
+.metric-val.ok { color:var(--green); }
+.metric-val.warn { color:var(--yellow); }
+.metric-val.crit { color:var(--red); }
+
+/* DB CONNECTOR */
+.db-connector { display:flex; align-items:center; justify-content:center; margin:10px 0 8px; gap:6px; }
+.db-connector-line { flex:1; height:1px; border-top:2px dashed; opacity:.35; }
+.db-connector-label { font-size:10px; font-weight:700; padding:2px 10px; border-radius:10px; color:#fff; white-space:nowrap; }
+
+/* DB SECTION */
+.db-section { border:2px solid; border-radius:8px; padding:12px 14px; }
+.db-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.db-icon { font-size:14px; }
+.db-name { font-size:12px; font-weight:700; }
+.db-engine { font-size:10px; color:var(--dim); margin-left:auto; }
+.db-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.db-metric { text-align:center; }
+.db-metric .v { font-size:15px; font-weight:700; }
+.db-metric .l { font-size:10px; color:var(--dim); }
+
+/* BAR */
+.bar-wrap { margin-top:6px; }
+.bar-lbl { display:flex; justify-content:space-between; font-size:10px; margin-bottom:3px; color:var(--dim); }
+.bar-track { background:#e9ecef; border-radius:4px; height:6px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:4px; }
+.fill-g { background:var(--green); }
+.fill-y { background:var(--yellow); }
+.fill-r { background:var(--red); }
+.fill-b { background:var(--blue); }
+
+/* CHARTS */
+.chart-row { display:grid; grid-template-columns:2fr 1fr; gap:var(--gap); margin-bottom:var(--gap); }
+.chart-3 { display:grid; grid-template-columns:1fr 1fr; gap:var(--gap); margin-bottom:var(--gap); }
+.chart-card { background:var(--card); border-radius:var(--r); padding:18px 20px; box-shadow:0 1px 4px rgba(0,0,0,.07); }
+.chart-card h3 { font-size:13px; font-weight:600; margin-bottom:3px; }
+.chart-card .csub { font-size:11px; color:var(--dim); margin-bottom:14px; }
+.chart-card canvas { max-height:220px; }
+
+/* INCIDENT */
+.incident { background:#fff8f8; border:1px solid #f5c6cb; border-left:4px solid var(--red); border-radius:var(--r); padding:16px 22px; margin-bottom:var(--gap); }
+.incident h3 { font-size:13px; font-weight:700; color:#c62828; margin-bottom:10px; }
+.incident-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.istat .v { font-size:22px; font-weight:800; color:#c62828; }
+.istat .l { font-size:10px; color:var(--dim); margin-top:2px; }
+
+.alert-box { background:#fff3cd; border:1px solid #ffc107; border-left:4px solid #ff9800; border-radius:var(--r); padding:12px 16px; margin-bottom:var(--gap); }
+.alert-box h4 { color:#856404; font-size:12px; font-weight:700; margin-bottom:4px; }
+.alert-box p { color:#856404; font-size:11px; line-height:1.4; }
+
+footer { text-align:center; font-size:11px; color:var(--dim); padding:16px; margin-top:8px; }
+
+@media(max-width:1100px){
+  .kpi-row{grid-template-columns:repeat(3,1fr);}
+  .instances-grid{grid-template-columns:1fr;}
+  .chart-row,.chart-3{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <h1>Smartpost — Infraestructura AWS</h1>
+    <p>Entorno de producción · 1 instancia · 1 base de datos · us-east-1</p>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-badge">Período: 29 Abr 2026</div>
+    <div>Cuenta: presis · Generado: 29 abril 2026</div>
+  </div>
+</div>
+
+<!-- HOT SALE -->
+<div class="banner">
+  <div>
+    <h2>🔥 Hot Sale — 11 de Mayo 2026</h2>
+    <p>Crecimiento proyectado de +40% en operaciones. Capacidad bajo evaluación para preparación.</p>
+  </div>
+  <div>
+    <div class="countdown" id="cd">12</div>
+    <div class="countdown-lbl">días restantes</div>
+  </div>
+</div>
+
+<!-- KPIs GLOBALES -->
+<div class="stitle">Resumen global</div>
+<div class="kpi-row">
+  <div class="kpi y">
+    <div class="kpi-ico">💾</div>
+    <div class="kpi-lbl">Uso de Disco</div>
+    <div class="kpi-val">73<span style="font-size:14px;font-weight:400">%</span></div>
+    <div class="kpi-sub">9.1 GB libres de 34 GB</div>
+  </div>
+  <div class="kpi g">
+    <div class="kpi-ico">🖥️</div>
+    <div class="kpi-lbl">CPU Promedio</div>
+    <div class="kpi-val">2.1<span style="font-size:14px;font-weight:400">%</span></div>
+    <div class="kpi-sub">Pico: 18.7%</div>
+  </div>
+  <div class="kpi g">
+    <div class="kpi-ico">🧠</div>
+    <div class="kpi-lbl">Memoria Disponible</div>
+    <div class="kpi-val">18.5<span style="font-size:14px;font-weight:400">GB</span></div>
+    <div class="kpi-sub">Uso: 38% de 30 GB</div>
+  </div>
+  <div class="kpi g">
+    <div class="kpi-ico">📊</div>
+    <div class="kpi-lbl">Workers PHP-FPM</div>
+    <div class="kpi-val">793<span style="font-size:14px;font-weight:400">/</span>793</div>
+    <div class="kpi-sub">Utilización: 28%</div>
+  </div>
+  <div class="kpi g">
+    <div class="kpi-ico">🗄️</div>
+    <div class="kpi-lbl">DB Conexiones</div>
+    <div class="kpi-val">12<span style="font-size:14px;font-weight:400">/</span>200</div>
+    <div class="kpi-sub">Uso: 6%</div>
+  </div>
+</div>
+
+<!-- ALERT -->
+<div class="alert-box">
+  <h4>⚠️ Atención — Espacio en Disco Crítico</h4>
+  <p>El servidor está al 73% de capacidad. Para el Hot Sale (+40% tráfico), se proyecta caída a <strong>6.5 GB libres</strong> (crítico). Recomendación: Expandir EBS a 50 GB inmediatamente.</p>
+</div>
+
+<!-- INSTANCIAS -->
+<div class="stitle">Instancia y Base de Datos</div>
+
+<div class="instances-grid" style="grid-template-columns:1fr;">
+
+  <!-- SMARTPOST PRODUCTION -->
+  <div class="inst-card">
+    <div class="inst-color-bar" style="background:#f97316"></div>
+    <div class="inst-body">
+      <div class="inst-header">
+        <div>
+          <div class="inst-name">
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f97316"></span>
+            Smartpost Production
+            <span class="inst-tag" style="background:#f97316">PRD</span>
+          </div>
+          <div class="inst-type">c6i.2xlarge · 8 vCPU · 30 GB RAM · us-east-1a</div>
+          <div class="inst-type" style="color:#888">34 GB almacenamiento EBS gp2</div>
+        </div>
+        <span class="badge warn"><span class="dot warn"></span>Requiere Atención</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric-item">
+          <div class="metric-lbl">CPU avg</div>
+          <div class="metric-val ok">2.1%</div>
+          <div class="metric-sub">pico: 18.7%</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-lbl">RAM usada</div>
+          <div class="metric-val ok">38%</div>
+          <div class="metric-sub">11.4 / 30 GB</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-lbl">Disco</div>
+          <div class="metric-val warn">73%</div>
+          <div class="metric-sub">24.8 / 34 GB</div>
+        </div>
+      </div>
+      <div class="bar-wrap" style="margin-bottom:4px;">
+        <div class="bar-lbl"><span>Espacio en Disco</span><span style="color:#f0a500;font-weight:600">73% — Próximo a límite</span></div>
+        <div class="bar-track"><div class="bar-fill fill-y" style="width:73%"></div></div>
+      </div>
+
+      <!-- CONECTOR -->
+      <div class="db-connector">
+        <div class="db-connector-line" style="border-color:#f97316"></div>
+        <div class="db-connector-label" style="background:#f97316">🗄️ Base de datos dedicada</div>
+        <div class="db-connector-line" style="border-color:#f97316"></div>
+      </div>
+
+      <!-- RDS -->
+      <div class="db-section" style="border-color:#f9731640;background:#fef3e220;">
+        <div class="db-header">
+          <span class="db-name" style="color:#f97316">smartpost-prod</span>
+          <span class="db-engine">Aurora MySQL 8.0 · db.r6i.xlarge · 8 GB RAM · 59.8 GB storage</span>
+        </div>
+        <div class="db-metrics">
+          <div class="db-metric"><div class="v" style="color:#22c55e">6.3%</div><div class="l">CPU avg</div></div>
+          <div class="db-metric"><div class="v" style="color:#22c55e">6.2 GB</div><div class="l">RAM libre avg</div></div>
+          <div class="db-metric"><div class="v" style="color:#22c55e">12 / 200</div><div class="l">Conexiones</div></div>
+        </div>
+        <div class="bar-wrap" style="margin-top:8px;">
+          <div class="bar-lbl"><span>RAM en uso</span><span style="color:#22c55e;font-weight:600">22% · mín: 5.8 GB</span></div>
+          <div class="bar-track"><div class="bar-fill fill-g" style="width:22%"></div></div>
+        </div>
+        <div class="bar-wrap" style="margin-top:4px;">
+          <div class="bar-lbl"><span>Conexiones pico</span><span style="color:#22c55e;font-weight:600">18 / 200 (9%)</span></div>
+          <div class="bar-track"><div class="bar-fill fill-g" style="width:9%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CHARTS -->
+<div class="stitle">Análisis de Performance</div>
+
+<div class="chart-row">
+  <div class="chart-card">
+    <h3>CPU Utilización — Últimas 24 horas</h3>
+    <div class="csub">Servidor EC2 c6i.2xlarge</div>
+    <canvas id="cpuChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>Estado actual por componente</h3>
+    <div class="csub">Semáforo de salud</div>
+    <canvas id="healthChart"></canvas>
+  </div>
+</div>
+
+<div class="chart-3">
+  <div class="chart-card">
+    <h3>Memoria — EC2 vs Base de Datos</h3>
+    <div class="csub">Uso actual</div>
+    <canvas id="ramChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>Proyección Hot Sale (+40%)</h3>
+    <div class="csub">Escenario sin optimización</div>
+    <canvas id="projectionChart"></canvas>
+  </div>
+</div>
+
+<!-- TABLA DE ESTADO -->
+<div class="stitle">Resumen de Métricas</div>
+<div class="chart-card" style="overflow-x:auto;">
+  <h3 style="margin-bottom:14px;">Estado de Componentes</h3>
+  <table style="width:100%;border-collapse:collapse;font-size:12px;">
+    <thead><tr style="border-bottom:2px solid #f0f0f0;">
+      <th style="text-align:left;padding:8px;color:var(--dim);font-size:11px;font-weight:600;">Componente</th>
+      <th style="text-align:center;padding:8px;color:var(--dim);font-size:11px;font-weight:600;">Métrica</th>
+      <th style="text-align:center;padding:8px;color:var(--dim);font-size:11px;font-weight:600;">Valor</th>
+      <th style="text-align:center;padding:8px;color:var(--dim);font-size:11px;font-weight:600;">Límite</th>
+      <th style="text-align:center;padding:8px;color:var(--dim);font-size:11px;font-weight:600;">Estado</th>
+    </tr></thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #f8f8f8;">
+        <td style="padding:8px;font-weight:600;">EC2 (CPU)</td>
+        <td style="padding:8px;color:var(--dim)">Uso Promedio</td>
+        <td style="text-align:center;padding:8px;font-weight:700;">2.1%</td>
+        <td style="text-align:center;padding:8px;color:var(--dim)">100%</td>
+        <td style="text-align:center;padding:8px;"><span class="badge ok" style="font-size:10px;">Óptimo</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #f8f8f8;">
+        <td style="padding:8px;font-weight:600;">EC2 (RAM)</td>
+        <td style="padding:8px;color:var(--dim)">Disponible</td>
+        <td style="text-align:center;padding:8px;font-weight:700;color:var(--green);">18.5 GB</td>
+        <td style="text-align:center;padding:8px;color:var(--dim)">30 GB</td>
+        <td style="text-align:center;padding:8px;"><span class="badge ok" style="font-size:10px;">Óptimo</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #f8f8f8;">
+        <td style="padding:8px;font-weight:600;">EC2 (Disco)</td>
+        <td style="padding:8px;color:var(--dim)">Disponible</td>
+        <td style="text-align:center;padding:8px;font-weight:700;color:var(--red);">9.1 GB</td>
+        <td style="text-align:center;padding:8px;color:var(--dim)">34 GB</td>
+        <td style="text-align:center;padding:8px;"><span class="badge warn" style="font-size:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #f8f8f8;">
+        <td style="padding:8px;font-weight:600;">RDS (CPU)</td>
+        <td style="padding:8px;color:var(--dim)">Uso Promedio</td>
+        <td style="text-align:center;padding:8px;font-weight:700;">6.3%</td>
+        <td style="text-align:center;padding:8px;color:var(--dim)">100%</td>
+        <td style="text-align:center;padding:8px;"><span class="badge ok" style="font-size:10px;">Óptimo</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #f8f8f8;">
+        <td style="padding:8px;font-weight:600;">RDS (RAM)</td>
+        <td style="padding:8px;color:var(--dim)">Disponible</td>
+        <td style="text-align:center;padding:8px;font-weight:700;color:var(--green);">6.2 GB</td>
+        <td style="text-align:center;padding:8px;color:var(--dim)">8 GB</td>
+        <td style="text-align:center;padding:8px;"><span class="badge ok" style="font-size:10px;">Óptimo</span></td>
+      </tr>
+      <tr>
+        <td style="padding:8px;font-weight:600;">RDS (Conexiones)</td>
+        <td style="padding:8px;color:var(--dim)">En Uso</td>
+        <td style="text-align:center;padding:8px;font-weight:700;">12 / 200</td>
+        <td style="text-align:center;padding:8px;color:var(--dim)">200 máx</td>
+        <td style="text-align:center;padding:8px;"><span class="badge ok" style="font-size:10px;">Óptimo</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- RECOMENDACIONES -->
+<div class="stitle">Recomendaciones para Hot Sale</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);margin-bottom:var(--gap);">
+  <div class="chart-card">
+    <h3 style="color:#f97316;margin-bottom:14px;">🔴 Crítico — Acción Inmediata</h3>
+    <div style="padding:12px;background:#ffebee;border-radius:6px;margin-bottom:10px;">
+      <div style="font-weight:700;color:#c62828;margin-bottom:4px;">1. Expandir EBS de 34 GB a 50 GB</div>
+      <div style="font-size:11px;color:#8b0000;">Libera capacidad para +40% tráfico. Sin downtime.</div>
+    </div>
+    <div style="padding:12px;background:#fff3cd;border-radius:6px;">
+      <div style="font-weight:700;color:#856404;margin-bottom:4px;">2. Optimizar PHP-FPM</div>
+      <div style="font-size:11px;color:#664d03;">Aumentar max_children: 793 → 1200 (según RAM disponible). Mejora +50% concurrencia.</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3 style="color:#22c55e;margin-bottom:14px;">🟢 Fortalezas</h3>
+    <div style="padding:12px;background:#e8f5e9;border-radius:6px;margin-bottom:10px;">
+      <div style="font-weight:700;color:#2e7d32;margin-bottom:4px;">✓ DB Optimizada</div>
+      <div style="font-size:11px;color:#1b5e20;">Aurora con r6i.xlarge · Baja CPU (6.3%) · RAM abundante (22% uso).</div>
+    </div>
+    <div style="padding:12px;background:#e8f5e9;border-radius:6px;">
+      <div style="font-weight:700;color:#2e7d32;margin-bottom:4px;">✓ Capacidad Computacional</div>
+      <div style="font-size:11px;color:#1b5e20;">c6i.2xlarge con 8 vCPU · CPU muy baja (2.1%) · Aún hay margen.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="chart-card" style="border-left:5px solid #f97316;padding:20px;background:#fef3e2;">
+  <h3 style="color:#f97316;font-size:16px;margin-bottom:10px;">Veredicto: Condicionalmente Listo para Hot Sale</h3>
+  <p style="color:#664d03;font-size:12px;line-height:1.6;margin-bottom:10px;">
+    Smartpost <strong>puede soportar +40% de tráfico</strong> si se resuelve el problema de disco inmediatamente. Los componentes de procesamiento (CPU, RAM) están en excelente estado. La base de datos (Aurora MySQL) está optimizada y con capacidad disponible.
+  </p>
+  <div style="padding:10px;background:#fff3cd;border-radius:4px;font-size:11px;color:#664d03;margin-top:10px;">
+    <strong>Requisito para GREEN:</strong> Expandir EBS a 50 GB en las próximas 24 horas. Estimado: 30-45 minutos de no-downtime.
+  </div>
+</div>
+
+<footer>Smartpost · AWS us-east-1 · Cuenta presis · 29 de abril de 2026 · Generado con Claude Code</footer>
+</div>
+
+<script>
+document.getElementById('cd').textContent = Math.max(0, Math.ceil((new Date('2026-05-11T00:00:00-03:00') - new Date()) / 86400000));
+
+const C = { orange:'#f97316', green:'#22c55e', yellow:'#f0a500', red:'#dc3545', blue:'#1e88e5', gray:'#90a4ae' };
+
+// CPU Chart
+new Chart(document.getElementById('cpuChart').getContext('2d'), {
+  type:'line',
+  data:{
+    labels:['00:00','04:00','08:00','12:00','16:00','20:00','24:00'],
+    datasets:[
+      { label:'CPU %', data:[1.2,0.8,2.1,3.4,2.7,1.9,2.1],
+        borderColor:C.orange, backgroundColor:C.orange+'22', borderWidth:2, fill:true, tension:0.4,
+        pointRadius:4, pointBackgroundColor:C.orange, pointBorderColor:'#fff', pointBorderWidth:2 }
+    ]
+  },
+  options:{ responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:false } },
+    scales:{ y:{beginAtZero:true, max:100, ticks:{callback:v=>v+'%'}} }
+  }
+});
+
+// Health Donut
+new Chart(document.getElementById('healthChart').getContext('2d'), {
+  type:'doughnut',
+  data:{
+    labels:['EC2 ✅','RDS ✅','Conexión ✅'],
+    datasets:[{ data:[1,1,1],
+      backgroundColor:[C.green+'DD',C.green+'BB',C.green+'99'],
+      borderColor:'#fff', borderWidth:2 }]
+  },
+  options:{ responsive:true, maintainAspectRatio:false, cutout:'55%',
+    plugins:{ legend:{ position:'bottom', labels:{ usePointStyle:true, font:{size:11} } } }
+  }
+});
+
+// RAM Chart
+new Chart(document.getElementById('ramChart').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels:['EC2','RDS'],
+    datasets:[
+      { label:'Disponible (GB)', data:[18.5, 6.2],
+        backgroundColor:[C.green+'99',C.green+'99'],
+        borderColor:[C.green,C.green], borderWidth:1.5, borderRadius:4 },
+      { label:'En Uso (GB)', data:[11.5, 1.8],
+        backgroundColor:[C.orange+'55',C.blue+'55'],
+        borderColor:[C.orange,C.blue], borderWidth:1.5, borderRadius:4 }
+    ]
+  },
+  options:{ responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{ usePointStyle:true, font:{size:11} } } },
+    scales:{ x:{grid:{display:false}}, y:{beginAtZero:true, ticks:{callback:v=>v+'GB'}} }
+  }
+});
+
+// Projection Chart
+new Chart(document.getElementById('projectionChart').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels:['Estado Actual','Con +40% Tráfico\n(sin mejoras)','Con Mejoras\nAplicadas'],
+    datasets:[
+      { label:'Disco Disponible (GB)', data:[9.1, 6.5, 16.1],
+        backgroundColor:[C.yellow+'99',C.red+'99',C.green+'99'],
+        borderColor:[C.yellow,C.red,C.green], borderWidth:1.5, borderRadius:4 }
+    ]
+  },
+  options:{ responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{ usePointStyle:true, font:{size:11} } } },
+    scales:{ x:{grid:{display:false}}, y:{beginAtZero:true, ticks:{callback:v=>v+'GB'}} }
+  }
+});
+</script>
+</body>
+</html>

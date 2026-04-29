@@ -43,5 +43,14 @@
     "date": "2026-04-29",
     "file": "2026-04-29-smartpost-an-lisis-detallado-db-rds-nginx.html",
     "description": "Análisis completo de infraestructura: credenciales de BD, métricas RDS, estado y logs de Nginx"
+  },
+  {
+    "id": "2026-04-29-smartpost-reporte-ejecutivo-abril-2026",
+    "title": "Smartpost - Reporte Ejecutivo Abril 2026",
+    "client": "Smartpost",
+    "type": "ejecutivo",
+    "date": "2026-04-29",
+    "file": "2026-04-29-smartpost-reporte-ejecutivo-abril-2026.html",
+    "description": "Análisis de performance y capacidad para Hot Sale. Recomendaciones para +40% de crecimiento."
   }
 ]
