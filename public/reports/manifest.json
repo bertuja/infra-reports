@@ -34,5 +34,14 @@
     "date": "2026-04-29",
     "file": "2026-04-29-smartpost-hotsale-readiness.html",
     "description": "Análisis de capacidad para crecimiento +40%. Disco crítico al 73%, requiere expansión EBS inmediata."
+  },
+  {
+    "id": "2026-04-29-smartpost-an-lisis-detallado-db-rds-nginx",
+    "title": "Smartpost - Análisis Detallado (DB, RDS, Nginx)",
+    "client": "Smartpost",
+    "type": "infra",
+    "date": "2026-04-29",
+    "file": "2026-04-29-smartpost-an-lisis-detallado-db-rds-nginx.html",
+    "description": "Análisis completo de infraestructura: credenciales de BD, métricas RDS, estado y logs de Nginx"
   }
 ]
