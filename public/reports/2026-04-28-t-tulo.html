@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telescope  & Plan de Acción — Presis</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080b0f;
+  --bg2: #0d1219;
+  --bg3: #111820;
+  --card: #0f1620;
+  --card2: #141d2a;
+  --border: #1e2d3d;
+  --border2: #253447;
+  --red: #ff3b3b;
+  --red-dim: rgba(255,59,59,0.12);
+  --orange: #ff8c00;
+  --orange-dim: rgba(255,140,0,0.12);
+  --yellow: #ffd24d;
+  --yellow-dim: rgba(255,210,77,0.1);
+  --green: #00e676;
+  --green-dim: rgba(0,230,118,0.1);
+  --blue: #2979ff;
+  --blue-dim: rgba(41,121,255,0.1);
+  --cyan: #00e5ff;
+  --cyan-dim: rgba(0,229,255,0.08);
+  --text: #c8d8e8;
+  --text-muted: #5a7a9a;
+  --text-bright: #f0f8ff;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Instrument Sans', sans-serif;
+  --display: 'Syne', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* GRID BACKGROUND */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(41,121,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(41,121,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NOISE OVERLAY */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+* { position: relative; z-index: 1; }
+
+/* ── HEADER ── */
+.header {
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  background: rgba(8,11,15,0.95);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  gap: 24px;
+}
+
+.logo {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--text-bright);
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 12px var(--red);
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--red); }
+  50% { opacity: 0.6; box-shadow: 0 0 20px var(--red); }
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.meta-chip {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.chip-date { background: var(--bg3); border: 1px solid var(--border2); color: var(--text-muted); }
+.chip-urgent { background: var(--red-dim); border: 1px solid rgba(255,59,59,0.3); color: var(--red); }
+
+/* ── HERO ── */
+.hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 48px 48px;
+}
+
+.hero-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-tag::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--red);
+}
+
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  color: var(--text-bright);
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  margin-bottom: 16px;
+}
+
+.hero h1 span { color: var(--red); }
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.7;
+}
+
+/* ── KPI STRIP ── */
+.kpi-strip {
+  max-width: 1200px;
+  margin: 0 auto 48px;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.kpi:hover { border-color: var(--border2); }
+
+.kpi-val {
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.kpi-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.kv-red { color: var(--red); }
+.kv-orange { color: var(--orange); }
+.kv-yellow { color: var(--yellow); }
+.kv-green { color: var(--green); }
+.kv-cyan { color: var(--cyan); }
+
+/* ── MAIN ── */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* ── SECTION TITLES ── */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.section-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: -0.5px;
+}
+
+.section-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── ALERT BOX ── */
+.alert {
+  border-radius: 10px;
+  padding: 20px 24px;
+  border: 1px solid;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.alert-red { background: var(--red-dim); border-color: rgba(255,59,59,0.25); }
+.alert-yellow { background: var(--yellow-dim); border-color: rgba(255,210,77,0.25); }
+.alert-green { background: var(--green-dim); border-color: rgba(0,230,118,0.25); }
+
+.alert-icon { font-size: 20px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+
+.alert-content {}
+.alert-title { font-family: var(--display); font-weight: 700; font-size: 15px; color: var(--text-bright); margin-bottom: 4px; }
+.alert-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.alert-body strong { color: var(--text); }
+
+/* ── BREAKDOWN TABLE ── */
+.breakdown {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.breakdown-header {
+  padding: 16px 24px;
+  background: var(--card2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.breakdown-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.breakdown-total {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  padding: 10px 24px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-align: left;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 12px 24px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(30,45,61,0.5);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.015); }
+
+.td-db { font-family: var(--mono); font-size: 12px; color: var(--cyan); font-weight: 500; }
+.td-table { font-family: var(--mono); font-size: 12px; color: var(--text); }
+.td-size { font-family: var(--mono); font-size: 13px; font-weight: 700; }
+.td-rows { font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+.td-type { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-family: var(--mono); display: inline-block; }
+.type-telescope { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,59,59,0.2); }
+.type-logger { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(255,140,0,0.2); }
+.type-audit { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(255,210,77,0.2); }
+.type-jobs { background: var(--blue-dim); color: #7eb3ff; border: 1px solid rgba(41,121,255,0.2); }
+
+.bar-wrap {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.8s ease;
+}
+
+/* ── TYPE CHART ── */
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.type-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.type-icon {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.ti-red { background: var(--red-dim); }
+.ti-orange { background: var(--orange-dim); }
+.ti-yellow { background: var(--yellow-dim); }
+.ti-blue { background: var(--blue-dim); }
+.ti-cyan { background: var(--cyan-dim); }
+.ti-green { background: var(--green-dim); }
+
+.type-info {}
+.type-name { font-family: var(--mono); font-size: 12px; color: var(--text); font-weight: 500; }
+.type-count { font-family: var(--display); font-size: 20px; font-weight: 800; line-height: 1.2; }
+.type-pct { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
+
+/* ── CODE BLOCK ── */
+.code-block {
+  background: #060a0f;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.code-header {
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.code-lang {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--border);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.code-body {
+  padding: 20px 24px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.75;
+  overflow-x: auto;
+  white-space: pre;
+  color: #a8c8e8;
+}
+
+.ck { color: #ff6b6b; }       /* keyword */
+.cs { color: #88d4f5; }       /* string */
+.cc { color: #4a6a8a; font-style: italic; } /* comment */
+.cv { color: #ffd24d; }       /* variable/value */
+.cm2 { color: #00e676; }      /* method/function */
+.cp { color: #c792ea; }       /* property */
+
+/* ── STEPS ── */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.step {
+  display: flex;
+  gap: 0;
+  position: relative;
+}
+
+.step-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 48px;
+  flex-shrink: 0;
+}
+
+.step-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.sn-red { background: var(--red-dim); border: 1px solid rgba(255,59,59,0.4); color: var(--red); }
+.sn-orange { background: var(--orange-dim); border: 1px solid rgba(255,140,0,0.4); color: var(--orange); }
+.sn-yellow { background: var(--yellow-dim); border: 1px solid rgba(255,210,77,0.4); color: var(--yellow); }
+.sn-green { background: var(--green-dim); border: 1px solid rgba(0,230,118,0.4); color: var(--green); }
+.sn-cyan { background: var(--cyan-dim); border: 1px solid rgba(0,229,255,0.3); color: var(--cyan); }
+
+.step-line {
+  width: 1px;
+  flex: 1;
+  background: var(--border);
+  margin: 4px 0;
+  min-height: 24px;
+}
+
+.step:last-child .step-line { display: none; }
+
+.step-right {
+  flex: 1;
+  padding: 4px 0 28px 20px;
+}
+
+.step-title {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.step-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.sb-urgent { background: var(--red-dim); border: 1px solid rgba(255,59,59,0.25); color: var(--red); }
+.sb-now { background: var(--orange-dim); border: 1px solid rgba(255,140,0,0.25); color: var(--orange); }
+.sb-later { background: var(--cyan-dim); border: 1px solid rgba(0,229,255,0.2); color: var(--cyan); }
+.sb-done { background: var(--green-dim); border: 1px solid rgba(0,230,118,0.25); color: var(--green); }
+
+/* ── TWO COLUMNS ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* ── INFO CARD ── */
+.info-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.info-card-title {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-card-body {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.info-card-body li {
+  margin-bottom: 6px;
+  padding-left: 12px;
+  position: relative;
+}
+
+.info-card-body li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--border2);
+  font-size: 10px;
+}
+
+/* ── MIGRATION TIMELINE ── */
+.migration-phases {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.phase {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.phase-header {
+  padding: 12px 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.ph-red { background: var(--red-dim); color: var(--red); border-bottom: 1px solid rgba(255,59,59,0.2); }
+.ph-orange { background: var(--orange-dim); color: var(--orange); border-bottom: 1px solid rgba(255,140,0,0.2); }
+.ph-yellow { background: var(--yellow-dim); color: var(--yellow); border-bottom: 1px solid rgba(255,210,77,0.2); }
+.ph-green { background: var(--green-dim); color: var(--green); border-bottom: 1px solid rgba(0,230,118,0.2); }
+
+.phase-body {
+  padding: 14px 16px;
+}
+
+.phase-item {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(30,45,61,0.5);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  line-height: 1.4;
+}
+
+.phase-item:last-child { border-bottom: none; }
+.phase-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border2); flex-shrink: 0; margin-top: 5px; }
+
+/* ── COMPARISON ── */
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.comp-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.comp-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.comp-title {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.comp-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.comp-bad { background: var(--red-dim); border-bottom-color: rgba(255,59,59,0.2); }
+.comp-bad .comp-title { color: var(--red); }
+
+.comp-good { background: var(--green-dim); border-bottom-color: rgba(0,230,118,0.2); }
+.comp-good .comp-title { color: var(--green); }
+
+.comp-body {
+  padding: 16px 20px;
+}
+
+.comp-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(30,45,61,0.5);
+  line-height: 1.45;
+}
+
+.comp-item:last-child { border-bottom: none; }
+.comp-x { color: var(--red); font-weight: 700; flex-shrink: 0; }
+.comp-check { color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+/* ── COST TABLE ── */
+.cost-table {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cost-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 12px 24px;
+  border-bottom: 1px solid rgba(30,45,61,0.5);
+  align-items: center;
+  font-size: 13px;
+}
+
+.cost-row:last-child { border-bottom: none; }
+
+.cost-head {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.cost-service { font-weight: 500; color: var(--text); }
+.cost-before { font-family: var(--mono); font-size: 12px; color: var(--red); }
+.cost-after { font-family: var(--mono); font-size: 12px; color: var(--green); }
+.cost-save { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--yellow); }
+.cost-total { background: rgba(0,230,118,0.05); border-top: 1px solid rgba(0,230,118,0.2) !important; }
+.cost-total .cost-service { font-family: var(--display); font-weight: 700; color: var(--text-bright); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 48px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .header { padding: 0 20px; }
+  .hero, .main { padding-left: 20px; padding-right: 20px; }
+  .kpi-strip { padding: 0 20px; grid-template-columns: repeat(3, 1fr); }
+  .two-col, .comparison { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr 1fr; }
+  .migration-phases { grid-template-columns: 1fr 1fr; }
+  .type-grid { grid-template-columns: 1fr 1fr; }
+  .cost-row { grid-template-columns: 1fr 1fr; gap: 4px; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero { animation: fadeUp 0.5s ease both; }
+.kpi-strip { animation: fadeUp 0.5s 0.1s ease both; }
+.main > section { animation: fadeUp 0.5s 0.2s ease both; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-dot"></div>
+      Presis — Infra Crisis Report
+    </div>
+    <div class="header-meta">
+      <span class="meta-chip chip-date">2026-04-28</span>
+      <span class="meta-chip chip-urgent">⚠ ACCIÓN REQUERIDA</span>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">Diagnóstico · epresisvirginia-cluster</div>
+  <h1>1,317 GB de logs<br>sin <span>nunca rotar</span></h1>
+  <p class="hero-sub">
+    El 80% del cluster Aurora de producción está ocupado por entradas de Laravel Telescope y loggers de aplicación que jamás se purgaron. Este documento describe el diagnóstico, las causas raíz y el plan de acción completo para los desarrolladores.
+  </p>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi">
+    <div class="kpi-val kv-red">1,317</div>
+    <div class="kpi-lbl">GB Totales cluster</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-val kv-orange">~1,050</div>
+    <div class="kpi-lbl">GB limpiables (logs)</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-val kv-yellow">80%</div>
+    <div class="kpi-lbl">del cluster son logs</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-val kv-green">~300</div>
+    <div class="kpi-lbl">GB esperados post-limpieza</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-val kv-cyan">5</div>
+    <div class="kpi-lbl">bases afectadas</div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- ── SECCIÓN 1: DIAGNÓSTICO ── -->
+  <section>
+    <div class="section-label">
+      <span class="section-num">01</span>
+      <div>
+        <div class="section-title">Diagnóstico — Qué está ocupando el espacio</div>
+        <div class="section-desc">Inventario completo de tablas de logs por base de datos</div>
+      </div>
+    </div>
+
+    <div class="alert alert-red">
+      <div class="alert-icon">🚨</div>
+      <div class="alert-content">
+        <div class="alert-title">Telescope activo en producción sin política de retención</div>
+        <div class="alert-body">Laravel Telescope está grabando <strong>todas las queries SQL, modelos Eloquent, accesos a Redis y cache</strong> en 5 bases de datos de producción. Nunca se configuró un proceso de purga. El resultado: 94 millones de filas en <code>servijur_lv</code> sola.</div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-header">
+        <span class="breakdown-title">Top tablas de logs — Candidatas a limpiar</span>
+        <span class="breakdown-total">~1,050 GB liberables</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Base de datos</th>
+            <th>Tabla</th>
+            <th>Tamaño</th>
+            <th>Filas</th>
+            <th>Tipo</th>
+            <th>% del total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-db">servijur_lv</td>
+            <td class="td-table">telescope_entries</td>
+            <td class="td-size kv-red">~392 GB</td>
+            <td class="td-rows">94M</td>
+            <td><span class="td-type type-telescope">Telescope</span></td>
+            <td><div>29.8%<div class="bar-wrap"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">interpost</td>
+            <td class="td-table">telescope_entries</td>
+            <td class="td-size kv-red">~203 GB</td>
+            <td class="td-rows">101M</td>
+            <td><span class="td-type type-telescope">Telescope</span></td>
+            <td><div>15.4%<div class="bar-wrap"><div class="bar-fill" style="width:52%;background:var(--red)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">milelogistic</td>
+            <td class="td-table">telescope_entries</td>
+            <td class="td-size kv-red">~130 GB</td>
+            <td class="td-rows">66M</td>
+            <td><span class="td-type type-telescope">Telescope</span></td>
+            <td><div>9.9%<div class="bar-wrap"><div class="bar-fill" style="width:33%;background:var(--red)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">milelogistic</td>
+            <td class="td-table">auditoria_celulares_historico</td>
+            <td class="td-size kv-orange">~39 GB</td>
+            <td class="td-rows">—</td>
+            <td><span class="td-type type-audit">Auditoría</span></td>
+            <td><div>3.0%<div class="bar-wrap"><div class="bar-fill" style="width:10%;background:var(--orange)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">space</td>
+            <td class="td-table">telescope_entries</td>
+            <td class="td-size kv-red">~74 GB</td>
+            <td class="td-rows">28M</td>
+            <td><span class="td-type type-telescope">Telescope</span></td>
+            <td><div>5.6%<div class="bar-wrap"><div class="bar-fill" style="width:19%;background:var(--red)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">bgr</td>
+            <td class="td-table">loggers</td>
+            <td class="td-size kv-orange">~79 GB</td>
+            <td class="td-rows">7.5M</td>
+            <td><span class="td-type type-logger">Logger</span></td>
+            <td><div>6.0%<div class="bar-wrap"><div class="bar-fill" style="width:20%;background:var(--orange)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">voys</td>
+            <td class="td-table">logs</td>
+            <td class="td-size kv-orange">~31 GB</td>
+            <td class="td-rows">—</td>
+            <td><span class="td-type type-logger">Logger</span></td>
+            <td><div>2.4%<div class="bar-wrap"><div class="bar-fill" style="width:8%;background:var(--orange)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">bgr</td>
+            <td class="td-table">api_loggers</td>
+            <td class="td-size kv-orange">~25 GB</td>
+            <td class="td-rows">—</td>
+            <td><span class="td-type type-logger">Logger</span></td>
+            <td><div>1.9%<div class="bar-wrap"><div class="bar-fill" style="width:6%;background:var(--orange)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">waybill</td>
+            <td class="td-table">loggers</td>
+            <td class="td-size kv-orange">~20 GB</td>
+            <td class="td-rows">—</td>
+            <td><span class="td-type type-logger">Logger</span></td>
+            <td><div>1.5%<div class="bar-wrap"><div class="bar-fill" style="width:5%;background:var(--orange)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">servijur_lv</td>
+            <td class="td-table">telescope_entries_tags</td>
+            <td class="td-size" style="color:var(--yellow)">~15 GB</td>
+            <td class="td-rows">—</td>
+            <td><span class="td-type type-telescope">Telescope</span></td>
+            <td><div>1.1%<div class="bar-wrap"><div class="bar-fill" style="width:4%;background:var(--yellow)"></div></div></div></td>
+          </tr>
+          <tr>
+            <td class="td-db">delegamas_lv</td>
+            <td class="td-table">failed_jobs</td>
+            <td class="td-size" style="color:#7eb3ff">~5 GB</td>
+            <td class="td-rows">—</td>
+            <td><span class="td-type type-jobs">Jobs</span></td>
+            <td><div>0.4%<div class="bar-wrap"><div class="bar-fill" style="width:1%;background:#7eb3ff)"></div></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN 2: CAUSA RAÍZ ── -->
+  <section>
+    <div class="section-label">
+      <span class="section-num">02</span>
+      <div>
+        <div class="section-title">Causa Raíz — Por qué llegamos a esto</div>
+        <div class="section-desc">Análisis del TelescopeServiceProvider y la composición real de los datos</div>
+      </div>
+    </div>
+
+    <div class="type-grid">
+      <div class="type-card">
+        <div class="type-icon ti-red">🔍</div>
+        <div class="type-info">
+          <div class="type-name">query</div>
+          <div class="type-count kv-red">43.5M</div>
+          <div class="type-pct">55.3% del total</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon ti-orange">🗂</div>
+        <div class="type-info">
+          <div class="type-name">model (Eloquent)</div>
+          <div class="type-count kv-orange">14.3M</div>
+          <div class="type-pct">18.2% del total</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon ti-yellow">⚡</div>
+        <div class="type-info">
+          <div class="type-name">redis</div>
+          <div class="type-count kv-yellow">8.5M</div>
+          <div class="type-pct">10.8% del total</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon ti-cyan">💾</div>
+        <div class="type-info">
+          <div class="type-name">cache</div>
+          <div class="type-count kv-cyan">8.1M</div>
+          <div class="type-pct">10.3% del total</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon ti-blue">🌐</div>
+        <div class="type-info">
+          <div class="type-name">request</div>
+          <div class="type-count" style="color:#7eb3ff">2.4M</div>
+          <div class="type-pct">3.0% del total</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon ti-green">🔧</div>
+        <div class="type-info">
+          <div class="type-name">exception + otros</div>
+          <div class="type-count kv-green">1.9M</div>
+          <div class="type-pct">2.4% del total</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-content">
+        <div class="alert-title">Watchers habilitados que no deberían estar en producción</div>
+        <div class="alert-body">El 94% del volumen es <strong>query + model + redis + cache</strong>. Estos watchers tienen valor en desarrollo pero son destructivos en producción con alto tráfico. Cada request de la API genera decenas de entradas en Aurora.</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-title">TelescopeServiceProvider.php — Estado actual (PROBLEMÁTICO)</span>
+            <span class="code-lang">PHP</span>
+          </div>
+          <div class="code-body"><span class="cc">// Graba TODO en producción:</span>
+<span class="cm2">Telescope</span>::<span class="cm2">filter</span>(<span class="ck">function</span> (<span class="cp">IncomingEntry</span> <span class="cv">$entry</span>) <span class="ck">use</span> (<span class="cv">$isLocal</span>) {
+    <span class="ck">return</span> <span class="cv">$isLocal</span> ||
+           <span class="cv">$entry</span>-><span class="cm2">isReportableException</span>() ||
+           <span class="cv">$entry</span>-><span class="cm2">isFailedRequest</span>() ||     <span class="cc">// ← 4xx/5xx masivos</span>
+           <span class="cv">$entry</span>-><span class="cm2">isFailedJob</span>() ||
+           <span class="cv">$entry</span>-><span class="cm2">isScheduledTask</span>() ||
+           <span class="cv">$entry</span>-><span class="cm2">hasMonitoredTag</span>();
+           <span class="cc">// ↑ Y con QueryWatcher, ModelWatcher,</span>
+           <span class="cc">//   RedisWatcher, CacheWatcher en TRUE</span>
+           <span class="cc">//   graba MILES de entradas por minuto</span>
+});</div>
+        </div>
+      </div>
+      <div>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-title">TelescopeServiceProvider.php — Fix correcto</span>
+            <span class="code-lang">PHP</span>
+          </div>
+          <div class="code-body"><span class="cc">// Solo errores críticos en producción:</span>
+<span class="cm2">Telescope</span>::<span class="cm2">filter</span>(<span class="ck">function</span> (<span class="cp">IncomingEntry</span> <span class="cv">$entry</span>) <span class="ck">use</span> (<span class="cv">$isLocal</span>) {
+    <span class="ck">if</span> (<span class="cv">$isLocal</span>) {
+        <span class="ck">return true</span>;
+    }
+
+    <span class="cc">// Producción: SOLO esto</span>
+    <span class="ck">return</span> <span class="cv">$entry</span>-><span class="cm2">isReportableException</span>() ||
+           <span class="cv">$entry</span>-><span class="cm2">isFailedJob</span>();
+
+    <span class="cc">// REMOVIDO: isFailedRequest()  → volumen masivo</span>
+    <span class="cc">// REMOVIDO: isScheduledTask()  → no crítico</span>
+    <span class="cc">// REMOVIDO: query/model/redis/cache watchers</span>
+});</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-title">.env — Watchers a deshabilitar en TODAS las apps de producción</span>
+        <span class="code-lang">ENV</span>
+      </div>
+      <div class="code-body"><span class="cc"># Pegar en .env de producción — servijur_lv, interpost, milelogistic, space, crab</span>
+<span class="cp">TELESCOPE_QUERY_WATCHER</span>=<span class="cv">false</span>
+<span class="cp">TELESCOPE_MODEL_WATCHER</span>=<span class="cv">false</span>
+<span class="cp">TELESCOPE_REDIS_WATCHER</span>=<span class="cv">false</span>
+<span class="cp">TELESCOPE_CACHE_WATCHER</span>=<span class="cv">false</span>
+<span class="cp">TELESCOPE_EVENT_WATCHER</span>=<span class="cv">false</span>
+<span class="cp">TELESCOPE_VIEW_WATCHER</span>=<span class="cv">false</span>
+<span class="cp">TELESCOPE_GATE_WATCHER</span>=<span class="cv">false</span>
+<span class="cp">TELESCOPE_CLIENT_REQUEST_WATCHER</span>=<span class="cv">false</span>
+
+<span class="cc"># Después de editar el .env, ejecutar en cada app:</span>
+<span class="cc"># php artisan config:clear && php artisan config:cache</span></div>
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN 3: PLAN DE LIMPIEZA ── -->
+  <section>
+    <div class="section-label">
+      <span class="section-num">03</span>
+      <div>
+        <div class="section-title">Plan de Limpieza — Borrado seguro por lotes</div>
+        <div class="section-desc">Ejecutar en DBeaver durante horario de bajo tráfico (2am–5am)</div>
+      </div>
+    </div>
+
+    <div class="alert alert-red">
+      <div class="alert-icon">🚫</div>
+      <div class="alert-content">
+        <div class="alert-title">NUNCA ejecutar TRUNCATE directo en estas tablas</div>
+        <div class="alert-body">Con tablas de 100M+ filas un <code>TRUNCATE</code> o <code>DELETE</code> sin <code>LIMIT</code> genera un lock que <strong>mata la aplicación en producción</strong>, satura el binlog de Aurora y produce timeouts en cascada. Usar siempre <code>DELETE ... LIMIT 10000</code>.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num sn-red">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-right">
+          <span class="step-badge sb-urgent">ANTES DE EMPEZAR</span>
+          <div class="step-title">Frenar Telescope en las 5 apps</div>
+          <div class="step-body">Si no se frena primero, los datos vuelven a crecer mientras se borra. Aplicar el .env del paso anterior y limpiar config cache en cada instancia.</div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-title">Ejecutar en cada instancia EC2 (SSH o SSM)</span>
+              <span class="code-lang">BASH</span>
+            </div>
+            <div class="code-body"><span class="cc"># Para cada app: servijur_lv, interpost, milelogistic, space, crab</span>
+<span class="ck">cd</span> /var/www/html/<span class="cv">{app}</span>
+
+<span class="cc"># Agregar al .env</span>
+<span class="cm2">echo</span> <span class="cs">"TELESCOPE_QUERY_WATCHER=false"</span> >> .env
+<span class="cm2">echo</span> <span class="cs">"TELESCOPE_MODEL_WATCHER=false"</span> >> .env
+<span class="cm2">echo</span> <span class="cs">"TELESCOPE_REDIS_WATCHER=false"</span> >> .env
+<span class="cm2">echo</span> <span class="cs">"TELESCOPE_CACHE_WATCHER=false"</span> >> .env
+
+<span class="cc"># Aplicar cambios</span>
+php artisan config:clear
+php artisan config:cache
+
+<span class="cc"># Verificar que paró de grabar</span>
+php artisan tinker --execute=<span class="cs">"echo app('Laravel\Telescope\Telescope')::isRecording() ? 'GRABANDO ⚠' : 'DETENIDO ✓';"</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num sn-orange">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-right">
+          <span class="step-badge sb-now">NOCHE — 2AM</span>
+          <div class="step-title">Verificar rango de fechas antes de borrar</div>
+          <div class="step-body">Ejecutar en DBeaver para confirmar fechas y cantidad real a borrar. Cambiar la base seleccionada en cada ejecución.</div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-title">DBeaver — Ejecutar en cada base afectada</span>
+              <span class="code-lang">SQL</span>
+            </div>
+            <div class="code-body"><span class="ck">USE</span> servijur_lv; <span class="cc">-- cambiar por: interpost, milelogistic, space, crab</span>
+
+<span class="ck">SELECT</span>
+    <span class="cm2">MIN</span>(created_at)                                    <span class="ck">AS</span> registro_mas_antiguo,
+    <span class="cm2">MAX</span>(created_at)                                    <span class="ck">AS</span> registro_mas_nuevo,
+    <span class="cm2">COUNT</span>(*)                                           <span class="ck">AS</span> total_filas,
+    <span class="cm2">SUM</span>(<span class="ck">CASE WHEN</span> created_at < <span class="cm2">NOW</span>() - <span class="ck">INTERVAL</span> <span class="cv">7</span> <span class="ck">DAY</span>
+        <span class="ck">THEN</span> <span class="cv">1</span> <span class="ck">ELSE</span> <span class="cv">0</span> <span class="ck">END</span>)                            <span class="ck">AS</span> filas_a_borrar,
+    <span class="cm2">ROUND</span>(
+        <span class="cm2">SUM</span>(<span class="ck">CASE WHEN</span> created_at < <span class="cm2">NOW</span>() - <span class="ck">INTERVAL</span> <span class="cv">7</span> <span class="ck">DAY</span>
+            <span class="ck">THEN</span> <span class="cv">1</span> <span class="ck">ELSE</span> <span class="cv">0</span> <span class="ck">END</span>) * <span class="cv">100.0</span> / <span class="cm2">COUNT</span>(*), <span class="cv">1</span>
+    )                                                  <span class="ck">AS</span> pct_a_borrar
+<span class="ck">FROM</span> telescope_entries;</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num sn-yellow">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-right">
+          <span class="step-badge sb-now">NOCHE — LOTES DE 10K</span>
+          <div class="step-title">Borrado por lotes — repetir hasta 0 filas afectadas</div>
+          <div class="step-body">Ejecutar el DELETE repetidamente. Cuando devuelva menos de 10,000 filas afectadas, esa base está limpia. Pasar a la siguiente.</div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-title">DBeaver — Script de borrado seguro (repetir en loop)</span>
+              <span class="code-lang">SQL</span>
+            </div>
+            <div class="code-body"><span class="ck">USE</span> servijur_lv; <span class="cc">-- ORDEN: servijur_lv → interpost → milelogistic → space → crab</span>
+
+<span class="cc">-- [1] Cuánto falta borrar (ejecutar entre cada lote)</span>
+<span class="ck">SELECT</span> <span class="cm2">COUNT</span>(*) <span class="ck">AS</span> filas_restantes
+<span class="ck">FROM</span> telescope_entries
+<span class="ck">WHERE</span> created_at < <span class="cm2">NOW</span>() - <span class="ck">INTERVAL</span> <span class="cv">7</span> <span class="ck">DAY</span>;
+
+<span class="cc">-- [2] Borrado de 10,000 filas (repetir hasta que afecte < 10,000)</span>
+<span class="ck">DELETE FROM</span> telescope_entries
+<span class="ck">WHERE</span> created_at < <span class="cm2">NOW</span>() - <span class="ck">INTERVAL</span> <span class="cv">7</span> <span class="ck">DAY</span>
+<span class="ck">LIMIT</span> <span class="cv">10000</span>;
+
+<span class="cc">-- Tiempo estimado por base:
+--   servijur_lv  → 94M filas → ~3-4 horas
+--   interpost    → 101M filas → ~3-4 horas
+--   milelogistic → 66M filas  → ~2-3 horas
+--   space        → 28M filas  → ~1 hora
+--   crab         → 3.6M filas → ~15 minutos</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num sn-green">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-right">
+          <span class="step-badge sb-later">POST LIMPIEZA</span>
+          <div class="step-title">Configurar pruning automático</div>
+          <div class="step-body">Agregar en <code>app/Console/Kernel.php</code> de cada app para que Telescope se auto-purgue diariamente. Con los watchers limitados, 48h de retención es más que suficiente.</div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-title">app/Console/Kernel.php — Agregar schedule</span>
+              <span class="code-lang">PHP</span>
+            </div>
+            <div class="code-body"><span class="ck">protected function</span> <span class="cm2">schedule</span>(<span class="cp">Schedule</span> <span class="cv">$schedule</span>): <span class="ck">void</span>
+{
+    <span class="cc">// Purgar Telescope diariamente — retener solo 48 horas</span>
+    <span class="cv">$schedule</span>-><span class="cm2">command</span>(<span class="cs">'telescope:prune --hours=48'</span>)-><span class="cm2">daily</span>();
+
+    <span class="cc">// ... resto de schedules existentes</span>
+}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN 4: MIGRACIÓN LOGS A S3 ── -->
+  <section>
+    <div class="section-label">
+      <span class="section-num">04</span>
+      <div>
+        <div class="section-title">Migración de Logs a S3 — Sacar los logs de Aurora</div>
+        <div class="section-desc">Plan para tablas loggers, logs, api_loggers (~180 GB). La solución más económica a largo plazo.</div>
+      </div>
+    </div>
+
+    <div class="comparison">
+      <div class="comp-card">
+        <div class="comp-header comp-bad">
+          <div class="comp-title">❌ Situación actual</div>
+          <div class="comp-sub">Logs en Aurora MySQL</div>
+        </div>
+        <div class="comp-body">
+          <div class="comp-item"><span class="comp-x">✗</span> Cada log ocupa espacio en Aurora (caro)</div>
+          <div class="comp-item"><span class="comp-x">✗</span> Crece sin límite — nunca se rotan</div>
+          <div class="comp-item"><span class="comp-x">✗</span> Aurora cobra por GB almacenado</div>
+          <div class="comp-item"><span class="comp-x">✗</span> Los backups automáticos incluyen los logs</div>
+          <div class="comp-item"><span class="comp-x">✗</span> Queries lentas al buscar logs históricos</div>
+          <div class="comp-item"><span class="comp-x">✗</span> Impacto en performance del cluster</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-header comp-good">
+          <div class="comp-title">✓ Objetivo</div>
+          <div class="comp-sub">Logs en archivos → S3</div>
+        </div>
+        <div class="comp-body">
+          <div class="comp-item"><span class="comp-check">✓</span> S3 Standard: $0.023/GB/mes vs Aurora ~$0.10/GB</div>
+          <div class="comp-item"><span class="comp-check">✓</span> Rotación automática con lifecycle policies</div>
+          <div class="comp-item"><span class="comp-check">✓</span> Archivado a Glacier después de 30 días ($0.004/GB)</div>
+          <div class="comp-item"><span class="comp-check">✓</span> Backups de Aurora más livianos y rápidos</div>
+          <div class="comp-item"><span class="comp-check">✓</span> Cero impacto en queries de producción</div>
+          <div class="comp-item"><span class="comp-check">✓</span> CloudWatch Logs para búsqueda y alertas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="migration-phases">
+      <div class="phase">
+        <div class="phase-header ph-red">Fase 1 — Inmediato</div>
+        <div class="phase-body">
+          <div class="phase-item"><div class="phase-dot"></div>Configurar Laravel logging a archivos diarios</div>
+          <div class="phase-item"><div class="phase-dot"></div>Desactivar escritura de logs en DB en las apps</div>
+          <div class="phase-item"><div class="phase-dot"></div>Verificar canal de logs en config/logging.php</div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-header ph-orange">Fase 2 — Esta semana</div>
+        <div class="phase-body">
+          <div class="phase-item"><div class="phase-dot"></div>Crear bucket S3 presis-logs con lifecycle</div>
+          <div class="phase-item"><div class="phase-dot"></div>Configurar logrotate + sync diario a S3</div>
+          <div class="phase-item"><div class="phase-dot"></div>IAM role con permisos mínimos para EC2→S3</div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-header ph-yellow">Fase 3 — Próxima semana</div>
+        <div class="phase-body">
+          <div class="phase-item"><div class="phase-dot"></div>Migrar tablas loggers/api_loggers a archivos</div>
+          <div class="phase-item"><div class="phase-dot"></div>Limpiar registros viejos en DB (por lotes)</div>
+          <div class="phase-item"><div class="phase-dot"></div>CloudWatch Logs Agent para logs críticos</div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-header ph-green">Fase 4 — Permanente</div>
+        <div class="phase-body">
+          <div class="phase-item"><div class="phase-dot"></div>S3 Lifecycle: Standard → Glacier 30 días</div>
+          <div class="phase-item"><div class="phase-dot"></div>Alertas CloudWatch en errores críticos</div>
+          <div class="phase-item"><div class="phase-dot"></div>Dashboard de logs centralizado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-title">config/logging.php — Configuración correcta para producción</span>
+        <span class="code-lang">PHP</span>
+      </div>
+      <div class="code-body"><span class="cc">// config/logging.php</span>
+<span class="ck">return</span> [
+    <span class="cs">'default'</span> => <span class="cm2">env</span>(<span class="cs">'LOG_CHANNEL'</span>, <span class="cs">'daily'</span>), <span class="cc">// ← cambiar de 'stack' a 'daily'</span>
+
+    <span class="cs">'channels'</span> => [
+        <span class="cs">'daily'</span> => [
+            <span class="cs">'driver'</span>  => <span class="cs">'daily'</span>,
+            <span class="cs">'path'</span>    => <span class="cm2">storage_path</span>(<span class="cs">'logs/laravel.log'</span>),
+            <span class="cs">'level'</span>   => <span class="cm2">env</span>(<span class="cs">'LOG_LEVEL'</span>, <span class="cs">'warning'</span>), <span class="cc">// ← solo warning+ en prd</span>
+            <span class="cs">'days'</span>    => <span class="cv">7</span>,                                <span class="cc">// ← retener 7 días en disco</span>
+            <span class="cs">'replace_placeholders'</span> => <span class="ck">true</span>,
+        ],
+    ],
+];
+
+<span class="cc">// En .env de producción:</span>
+<span class="cc">// LOG_CHANNEL=daily</span>
+<span class="cc">// LOG_LEVEL=warning    ← no loguear debug/info en producción</span></div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-title">Script bash — Sync diario de logs a S3 (cron en cada instancia)</span>
+        <span class="code-lang">BASH</span>
+      </div>
+      <div class="code-body"><span class="cc">#!/bin/bash
+# /usr/local/bin/sync-logs-s3.sh
+# Cron: 0 3 * * * /usr/local/bin/sync-logs-s3.sh</span>
+
+<span class="cv">BUCKET</span>=<span class="cs">"presis-logs-prod"</span>
+<span class="cv">APP_NAME</span>=<span class="cs">"servijur_lv"</span>  <span class="cc"># cambiar por app</span>
+<span class="cv">INSTANCE_ID</span>=<span class="cm2">$(</span>curl -s http://169.254.169.254/latest/meta-data/instance-id<span class="cm2">)</span>
+<span class="cv">DATE</span>=<span class="cm2">$(</span>date +%Y/%m/%d<span class="cm2">)</span>
+<span class="cv">LOG_PATH</span>=<span class="cs">"/var/www/html/${APP_NAME}/storage/logs"</span>
+
+<span class="cc"># Sync logs del día anterior a S3</span>
+aws s3 sync <span class="cv">$LOG_PATH</span> <span class="cs">s3://${BUCKET}/${APP_NAME}/${DATE}/${INSTANCE_ID}/</span> \
+    --exclude <span class="cs">"*.log"</span> \
+    --include <span class="cs">"laravel-$(date -d yesterday +%Y-%m-%d).log"</span> \
+    --storage-class STANDARD_IA
+
+<span class="cm2">echo</span> <span class="cs">"✓ Logs sincronizados: ${APP_NAME} → s3://${BUCKET}/${APP_NAME}/${DATE}/"</span>
+
+<span class="cc"># Eliminar logs de más de 7 días en disco (logrotate ya comprime)</span>
+<span class="cm2">find</span> <span class="cv">$LOG_PATH</span> -name <span class="cs">"*.log.gz"</span> -mtime +7 -delete</div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-title">AWS CLI — Bucket S3 con lifecycle automático</span>
+        <span class="code-lang">BASH</span>
+      </div>
+      <div class="code-body"><span class="cc"># Crear bucket</span>
+aws s3api create-bucket \
+    --bucket presis-logs-prod \
+    --region us-east-1
+
+<span class="cc"># Lifecycle: Standard → Standard-IA (30d) → Glacier (60d) → Delete (365d)</span>
+aws s3api put-bucket-lifecycle-configuration \
+    --bucket presis-logs-prod \
+    --lifecycle-configuration <span class="cs">'{
+  "Rules": [{
+    "ID": "logs-lifecycle",
+    "Status": "Enabled",
+    "Filter": {"Prefix": ""},
+    "Transitions": [
+      {"Days": 30, "StorageClass": "STANDARD_IA"},
+      {"Days": 60, "StorageClass": "GLACIER"}
+    ],
+    "Expiration": {"Days": 365}
+  }]
+}'</span>
+
+<span class="cc"># Costo estimado 1,000 GB de logs:
+#   S3 Standard   (0-30d):  $23/mes
+#   Standard-IA  (30-60d):  $12.50/mes
+#   Glacier       (60d+):   $4/mes
+#   vs Aurora actual:       ~$100/mes por los mismos datos</span></div>
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN 5: COSTO ── -->
+  <section>
+    <div class="section-label">
+      <span class="section-num">05</span>
+      <div>
+        <div class="section-title">Impacto en Costos — Antes vs Después</div>
+        <div class="section-desc">Estimación mensual post-implementación completa</div>
+      </div>
+    </div>
+
+    <div class="cost-table">
+      <div class="cost-row cost-head">
+        <div>Servicio / Concepto</div>
+        <div>Antes (est.)</div>
+        <div>Después (est.)</div>
+        <div>Ahorro mensual</div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-service">Aurora storage — epresisvirginia-cluster<br><small style="color:var(--text-muted);font-size:11px">1,317 GB → ~300 GB post-limpieza</small></div>
+        <div class="cost-before">~$132/mes</div>
+        <div class="cost-after">~$30/mes</div>
+        <div class="cost-save">~$100/mes</div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-service">Aurora backups automáticos<br><small style="color:var(--text-muted);font-size:11px">Backups más livianos y rápidos</small></div>
+        <div class="cost-before">~$40/mes</div>
+        <div class="cost-after">~$9/mes</div>
+        <div class="cost-save">~$31/mes</div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-service">S3 logs (nueva infraestructura)<br><small style="color:var(--text-muted);font-size:11px">~1TB logs con lifecycle a Glacier</small></div>
+        <div class="cost-before">$0</div>
+        <div class="cost-after">~$10/mes</div>
+        <div class="cost-save" style="color:var(--text-muted)">−$10/mes</div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-service">Aurora I/O — queries en DB de logs<br><small style="color:var(--text-muted);font-size:11px">Reducción de escrituras masivas</small></div>
+        <div class="cost-before">~$30/mes</div>
+        <div class="cost-after">~$5/mes</div>
+        <div class="cost-save">~$25/mes</div>
+      </div>
+      <div class="cost-row cost-total">
+        <div class="cost-service">TOTAL ESTIMADO</div>
+        <div class="cost-before" style="font-size:16px;font-weight:800">~$202/mes</div>
+        <div class="cost-after" style="font-size:16px;font-weight:800">~$54/mes</div>
+        <div class="cost-save" style="font-size:16px;font-weight:800">~$148/mes</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECCIÓN 6: RESUMEN EJECUTIVO ── -->
+  <section>
+    <div class="section-label">
+      <span class="section-num">06</span>
+      <div>
+        <div class="section-title">Resumen para Desarrolladores — Qué hacer y en qué orden</div>
+        <div class="section-desc">Checklist de acciones ordenadas por urgencia</div>
+      </div>
+    </div>
+
+    <div class="three-col">
+      <div class="info-card">
+        <div class="info-card-title"><span style="color:var(--red)">🔴</span> URGENTE — Esta noche</div>
+        <div class="info-card-body">
+          <ul>
+            <li>Agregar variables TELESCOPE_*_WATCHER=false al .env de las 5 apps</li>
+            <li>Ejecutar <code>php artisan config:clear && config:cache</code> en cada app</li>
+            <li>Verificar con tinker que isRecording() devuelve false</li>
+            <li>Ejecutar borrado por lotes en DBeaver (servijur_lv primero)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title"><span style="color:var(--orange)">🟠</span> Esta semana</div>
+        <div class="info-card-body">
+          <ul>
+            <li>Modificar TelescopeServiceProvider en las 5 apps (remover isFailedRequest)</li>
+            <li>Agregar telescope:prune --hours=48 al Kernel.php</li>
+            <li>Cambiar LOG_CHANNEL=daily y LOG_LEVEL=warning en .env de producción</li>
+            <li>Continuar borrado por lotes en interpost, milelogistic, space, crab</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title"><span style="color:var(--green)">🟢</span> Próximas 2 semanas</div>
+        <div class="info-card-body">
+          <ul>
+            <li>Crear bucket S3 presis-logs-prod con lifecycle configurado</li>
+            <li>Instalar script sync-logs-s3.sh en cada instancia + cron 3am</li>
+            <li>Migrar tablas loggers/api_loggers: dejar de escribir en DB</li>
+            <li>Limpiar tablas loggers por lotes (bgr, voys, waybill)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:24px;margin-bottom:0">
+      <div class="alert-icon">✅</div>
+      <div class="alert-content">
+        <div class="alert-title">Resultado esperado post-implementación</div>
+        <div class="alert-body">
+          El cluster <strong>epresisvirginia-cluster</strong> pasará de <strong>1,317 GB → ~300 GB</strong>. 
+          Los logs de Telescope quedarán limitados a excepciones y jobs fallidos (útil, no ruidoso). 
+          Los logs de aplicación irán a archivos → S3 con lifecycle automático. 
+          Ahorro estimado: <strong>~$148/mes</strong> en costos AWS.
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  Presis Consultores — Infra Crisis Report &nbsp;·&nbsp; epresisvirginia-cluster &nbsp;·&nbsp; 2026-04-28 &nbsp;·&nbsp; Preparado por DBYTE DevOps
+</footer>
+
+</body>
+</html>
