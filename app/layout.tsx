@@ -5,12 +5,13 @@ import "./globals.css";
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
 export const metadata: Metadata = {
-  title: "Infra Reports — DBYTE",
-  description: "Portal de reportes de infraestructura AWS",
+  title: "DBYTE Infra Reports — Infrastructure & DevOps Analytics",
+  description: "Portal centralizado de reportes de infraestructura AWS. Análisis de capacidad, preparación HotSale, auditorías técnicas y reportes ejecutivos.",
   openGraph: {
-    title: "Infra Reports — DBYTE",
-    description: "Portal de reportes de infraestructura AWS",
+    title: "DBYTE Infra Reports — Infrastructure & DevOps Analytics",
+    description: "Portal centralizado de reportes de infraestructura AWS",
     type: "website",
+    url: "https://infra-reports.vercel.app",
   },
 };
 
