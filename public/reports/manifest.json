@@ -25,5 +25,14 @@
     "date": "2026-04-28",
     "file": "2026-04-28-t-tulo.html",
     "description": ""
+  },
+  {
+    "id": "2026-04-29-smartpost-hotsale-readiness",
+    "title": "Smartpost - HotSale Readiness",
+    "client": "Presis Postal",
+    "type": "hotsale",
+    "date": "2026-04-29",
+    "file": "2026-04-29-smartpost-hotsale-readiness.html",
+    "description": "Análisis de capacidad para crecimiento +40%. Disco crítico al 73%, requiere expansión EBS inmediata."
   }
 ]
