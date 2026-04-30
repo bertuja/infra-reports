@@ -52,5 +52,14 @@
     "date": "2026-04-29",
     "file": "2026-04-29-smartpost-reporte-ejecutivo-abril-2026.html",
     "description": "Análisis de performance y capacidad para Hot Sale. Recomendaciones para +40% de crecimiento."
+  },
+  {
+    "id": "2026-04-30-cve-2026-31431-mitigation-dashboard",
+    "title": "CVE-2026-31431 Mitigation Dashboard",
+    "client": "DBYTE Multi-Cliente",
+    "type": "infra",
+    "date": "2026-04-30",
+    "file": "2026-04-30-cve-2026-31431-mitigation-dashboard.html",
+    "description": "Mitigación de Copy Fail en 43 instancias EC2 distribu idas en 8 perfiles AWS. Cobertura 93-95%, 0 downtime, módulo algif_aead deshabilitado. Con gráficos interactivos."
   }
 ]
