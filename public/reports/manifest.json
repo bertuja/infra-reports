@@ -79,5 +79,14 @@
     "date": "2026-04-30",
     "file": "2026-04-30-cve-2026-31431-resumen-ejecutivo-dbyte.html",
     "description": "Informe gerencial con métricas, impacto en seguridad/negocio, y recomendaciones de DBYTE. 4 prioridades de acción."
+  },
+  {
+    "id": "2026-04-30-cve-2026-31431-infograf-a-t-cnica-para-redes",
+    "title": "CVE-2026-31431 — Infografía Técnica para Redes",
+    "client": "DBYTE Security",
+    "type": "otro",
+    "date": "2026-04-30",
+    "file": "2026-04-30-cve-2026-31431-infograf-a-t-cnica-para-redes.html",
+    "description": "Infografía responsiva sin información sensible. Problema/Solución, gráficos de cobertura, impacto de seguridad. Optimizada para compartir en LinkedIn, Twitter, etc."
   }
 ]
