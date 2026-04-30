@@ -61,5 +61,14 @@
     "date": "2026-04-30",
     "file": "2026-04-30-cve-2026-31431-mitigation-dashboard.html",
     "description": "Mitigación de Copy Fail en 43 instancias EC2 distribu idas en 8 perfiles AWS. Cobertura 93-95%, 0 downtime, módulo algif_aead deshabilitado. Con gráficos interactivos."
+  },
+  {
+    "id": "2026-04-30-cve-2026-31431-mitigaci-n-reporte-ejecutivo",
+    "title": "CVE-2026-31431 Mitigación — Reporte Ejecutivo",
+    "client": "DBYTE Multi-Cliente",
+    "type": "ejecutivo",
+    "date": "2026-04-30",
+    "file": "2026-04-30-cve-2026-31431-mitigaci-n-reporte-ejecutivo.html",
+    "description": "Informe ejecutivo de mitigación CVE-2026-31431. 8 perfiles, 43 instancias, 40-41 exitosas. Recomendaciones y plan de acción."
   }
 ]
