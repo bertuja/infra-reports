@@ -70,5 +70,14 @@
     "date": "2026-04-30",
     "file": "2026-04-30-cve-2026-31431-mitigaci-n-reporte-ejecutivo.html",
     "description": "Informe ejecutivo de mitigación CVE-2026-31431. 8 perfiles, 43 instancias, 40-41 exitosas. Recomendaciones y plan de acción."
+  },
+  {
+    "id": "2026-04-30-cve-2026-31431-resumen-ejecutivo-dbyte",
+    "title": "CVE-2026-31431 — Resumen Ejecutivo DBYTE",
+    "client": "DBYTE Multi-Cliente",
+    "type": "ejecutivo",
+    "date": "2026-04-30",
+    "file": "2026-04-30-cve-2026-31431-resumen-ejecutivo-dbyte.html",
+    "description": "Informe gerencial con métricas, impacto en seguridad/negocio, y recomendaciones de DBYTE. 4 prioridades de acción."
   }
 ]
