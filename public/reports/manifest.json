@@ -88,5 +88,14 @@
     "date": "2026-04-30",
     "file": "2026-04-30-cve-2026-31431-infograf-a-t-cnica-para-redes.html",
     "description": "Infografía responsiva sin información sensible. Problema/Solución, gráficos de cobertura, impacto de seguridad. Optimizada para compartir en LinkedIn, Twitter, etc."
+  },
+  {
+    "id": "2026-05-08-dirtyfrag-mitigaci-n-cve-2026-43284-y-cve-2026-43500",
+    "title": "Dirtyfrag - Mitigación CVE-2026-43284 y CVE-2026-43500",
+    "client": "DBYTE",
+    "type": "infra",
+    "date": "2026-05-08",
+    "file": "2026-05-08-dirtyfrag-mitigaci-n-cve-2026-43284-y-cve-2026-43500.html",
+    "description": "Mitigación de vulnerabilidades críticas de kernel Linux. 49 instancias parcheadas en 12 cuentas AWS vía SSM sin downtime."
   }
 ]
