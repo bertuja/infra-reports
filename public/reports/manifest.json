@@ -97,5 +97,14 @@
     "date": "2026-05-08",
     "file": "2026-05-08-dirtyfrag-mitigaci-n-cve-2026-43284-y-cve-2026-43500.html",
     "description": "Mitigación de vulnerabilidades críticas de kernel Linux. 49 instancias parcheadas en 12 cuentas AWS vía SSM sin downtime."
+  },
+  {
+    "id": "2026-05-31-auditor-a-de-seguridad-multi-cuenta-aws-2026-05-31",
+    "title": "Auditoría de Seguridad Multi-Cuenta AWS — 2026-05-31",
+    "client": "DBYTE",
+    "type": "infra",
+    "date": "2026-05-31",
+    "file": "2026-05-31-auditor-a-de-seguridad-multi-cuenta-aws-2026-05-31.html",
+    "description": "21 cuentas auditadas. 387 findings (236 FAIL, 33 WARN). Módulos: seguridad, respaldos, networking."
   }
 ]
