@@ -1,0 +1,72 @@
+{
+  "report_date": "2026-04-29T18:47:35Z",
+  "instance_id": "i-0e85d055435ad091e",
+  "instance_type": "x8g.large",
+  "rds_instance": "database-01 (Aurora MySQL)",
+  "period": "Last 24 hours",
+  "ec2": {
+    "cpu_utilization": {
+      "unit": "Percent",
+      "average": 18.55,
+      "maximum": 87.98,
+      "data_points": 24
+    },
+    "network_in": {
+      "unit": "Bytes/sec",
+      "average": 48.5,
+      "unit_formatted": "MB/s",
+      "data_points": 24
+    },
+    "network_out": {
+      "unit": "Bytes/sec",
+      "average": 7.7,
+      "unit_formatted": "MB/s",
+      "data_points": 24
+    },
+    "status_checks": {
+      "failed_count": 0,
+      "status": "HEALTHY"
+    }
+  },
+  "rds": {
+    "cpu_utilization": {
+      "unit": "Percent",
+      "average": 52.5,
+      "maximum": 99.47,
+      "data_points": 6
+    },
+    "database_connections": {
+      "unit": "Count",
+      "average": 182,
+      "maximum": 242,
+      "utilization_percent": 75,
+      "data_points": 6
+    },
+    "read_latency": {
+      "unit": "Milliseconds",
+      "average": 1.68,
+      "maximum": 2.46,
+      "status": "EXCELLENT",
+      "data_points": 6
+    },
+    "write_latency": {
+      "unit": "Milliseconds",
+      "average": 2.16,
+      "maximum": 3.28,
+      "status": "EXCELLENT",
+      "data_points": 6
+    },
+    "storage_used": {
+      "unit": "GB",
+      "data_points": 0,
+      "status": "N/A - Not configured in CloudWatch"
+    }
+  },
+  "health_status": "HEALTHY",
+  "summary": {
+    "ec2_health": "OPTIMAL - CPU averaging 18.55%, well below threshold",
+    "rds_health": "ACCEPTABLE - CPU occasionally peaks to 99.47%, monitor during high load",
+    "latency": "EXCELLENT - Read/Write latency below 3ms",
+    "connectivity": "NORMAL - Database connections at 75% capacity"
+  }
+}

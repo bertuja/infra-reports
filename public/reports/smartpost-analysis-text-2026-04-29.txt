@@ -1,0 +1,92 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                   SMARTPOST DETAILED ANALYSIS REPORT                         ║
+║                                                                              ║
+║ Instance: i-0e85d055435ad091e                                               ║
+║ Environment: Production (presis)                                            ║
+║ Generated: $(date)                                                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. DATABASE CONFIGURATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DATABASE CREDENTIALS FROM .ENV:
+
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. RDS METRICS & CONFIGURATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RDS CLUSTER: $(echo $RDS_CLUSTER)
+RDS INSTANCE: $(echo $RDS_INSTANCE)
+
+INSTANCE CONFIGURATION:
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. NGINX STATUS & CONFIGURATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+=== NGINX VERSION ===
+nginx version: nginx/1.24.0 (Ubuntu)
+
+=== NGINX TEST ===
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+=== NGINX STATUS ===
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-04-28 06:08:20 UTC; 1 day 12h ago
+       Docs: man:nginx(8)
+    Process: 3195698 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 3195710 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+   Main PID: 3195848 (nginx)
+      Tasks: 3 (limit: 37774)
+     Memory: 86.0M (peak: 87.5M)
+        CPU: 1min 52.570s
+     CGroup: /system.slice/nginx.service
+             ├─3195848 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"
+             ├─3195866 "nginx: worker process"
+             └─3195867 "nginx: worker process"
+
+Apr 28 06:08:20 ip-172-31-17-69 systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+Apr 28 06:08:20 ip-172-31-17-69 systemd[1]: Started nginx.service - A high performance web server and a reverse proxy server.
+
+=== ACTIVE CONNECTIONS ===
+0
+
+=== WORKER PROCESSES ===
+3
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. NGINX ERROR LOGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+=== NGINX ERROR LOG (ÚLTIMAS 20 LÍNEAS) ===
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. NGINX ACCESS LOGS ANALYSIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+=== 5XX ERRORS (HOY) ===
+
+=== TOP 10 ENDPOINTS ===
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANALYSIS SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Database credentials extracted (safe — no password shown)
+✓ RDS metrics retrieved from AWS API
+✓ Nginx configuration validated
+✓ Error logs analyzed for issues
+✓ Access logs analyzed for traffic patterns
+
+Generated: $(date)
+Report: $REPORT_TEXT
+

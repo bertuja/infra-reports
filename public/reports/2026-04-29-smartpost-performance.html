@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartpost - Reporte de Performance (24h)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            margin-bottom: 15px;
+        }
+
+        .report-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            font-size: 0.95em;
+            opacity: 0.9;
+            flex-wrap: wrap;
+        }
+
+        .health-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        .health-healthy {
+            background: rgba(52, 211, 153, 0.3);
+            color: #10b981;
+        }
+
+        .health-warning {
+            background: rgba(251, 191, 36, 0.3);
+            color: #f59e0b;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #1e3c72;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #2a5298;
+            font-weight: 700;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #2a5298;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .metric-card.optimal {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
+        }
+
+        .metric-card.acceptable {
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
+
+        .metric-card.warning {
+            border-left-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+
+        .metric-label {
+            font-size: 0.95em;
+            color: #6b7280;
+            margin-bottom: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .metric-unit {
+            font-size: 0.85em;
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        .metric-status {
+            font-size: 0.9em;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+        }
+
+        .status-excellent {
+            color: #10b981;
+        }
+
+        .status-good {
+            color: #3b82f6;
+        }
+
+        .status-acceptable {
+            color: #f59e0b;
+        }
+
+        .status-warning {
+            color: #ef4444;
+        }
+
+        .table-section {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        th {
+            background: #1e3c72;
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9em;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        tr:hover {
+            background: #f3f4f6;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .recommendations h3 {
+            color: #92400e;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #78350f;
+            line-height: 1.6;
+        }
+
+        .recommendations li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #f59e0b;
+        }
+
+        .footer {
+            background: #f9fafb;
+            padding: 20px 40px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+
+        .progress-fill.critical {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            .report-meta {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .instance-info {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            padding: 0;
+        }
+
+        .info-label {
+            font-size: 0.85em;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #1f2937;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Smartpost Performance Report</h1>
+            <p>Infrastructure Metrics & Executive Summary</p>
+            <div class="report-meta">
+                <span><strong>Period:</strong> Last 24 Hours</span>
+                <span><strong>Generated:</strong> 2026-04-29 18:47 UTC</span>
+                <span class="health-badge health-healthy">HEALTHY</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Instance Information -->
+            <div class="instance-info">
+                <div class="info-item">
+                    <div class="info-label">EC2 Instance</div>
+                    <div class="info-value">i-0e85d055435ad091e</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Instance Type</div>
+                    <div class="info-value">x8g.large</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Region</div>
+                    <div class="info-value">us-east-1</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Database</div>
+                    <div class="info-value">Aurora MySQL (database-01)</div>
+                </div>
+            </div>
+
+            <!-- EC2 Metrics -->
+            <div class="section">
+                <h2 class="section-title">EC2 Instance Performance</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card optimal">
+                        <div class="metric-label">CPU Utilization (Average)</div>
+                        <div class="metric-value">18.55%</div>
+                        <div class="metric-unit">24-hour average</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 18.55%"></div>
+                        </div>
+                        <div class="metric-status status-excellent">OPTIMAL</div>
+                    </div>
+
+                    <div class="metric-card acceptable">
+                        <div class="metric-label">CPU Utilization (Peak)</div>
+                        <div class="metric-value">87.98%</div>
+                        <div class="metric-unit">Maximum spike</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill warning" style="width: 87.98%"></div>
+                        </div>
+                        <div class="metric-status status-acceptable">MONITORED</div>
+                    </div>
+
+                    <div class="metric-card optimal">
+                        <div class="metric-label">Network In</div>
+                        <div class="metric-value">48.5</div>
+                        <div class="metric-unit">MB/s average</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 35%"></div>
+                        </div>
+                        <div class="metric-status status-excellent">NORMAL</div>
+                    </div>
+
+                    <div class="metric-card optimal">
+                        <div class="metric-label">Network Out</div>
+                        <div class="metric-value">7.7</div>
+                        <div class="metric-unit">MB/s average</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 25%"></div>
+                        </div>
+                        <div class="metric-status status-excellent">NORMAL</div>
+                    </div>
+
+                    <div class="metric-card optimal">
+                        <div class="metric-label">Status Checks</div>
+                        <div class="metric-value">100%</div>
+                        <div class="metric-unit">Pass rate (24h)</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="metric-status status-excellent">HEALTHY</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RDS Metrics -->
+            <div class="section">
+                <h2 class="section-title">Database (Aurora MySQL) Performance</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card acceptable">
+                        <div class="metric-label">CPU Utilization (Average)</div>
+                        <div class="metric-value">52.5%</div>
+                        <div class="metric-unit">24-hour average</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill warning" style="width: 52.5%"></div>
+                        </div>
+                        <div class="metric-status status-acceptable">ACCEPTABLE</div>
+                    </div>
+
+                    <div class="metric-card warning">
+                        <div class="metric-label">CPU Utilization (Peak)</div>
+                        <div class="metric-value">99.47%</div>
+                        <div class="metric-unit">Maximum observed</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill critical" style="width: 99.47%"></div>
+                        </div>
+                        <div class="metric-status status-warning">PEAK LOAD</div>
+                    </div>
+
+                    <div class="metric-card optimal">
+                        <div class="metric-label">Active Connections</div>
+                        <div class="metric-value">182</div>
+                        <div class="metric-unit">Average / 242 max</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                        <div class="metric-status status-good">75% CAPACITY</div>
+                    </div>
+
+                    <div class="metric-card optimal">
+                        <div class="metric-label">Read Latency</div>
+                        <div class="metric-value">1.68</div>
+                        <div class="metric-unit">milliseconds (avg)</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 20%"></div>
+                        </div>
+                        <div class="metric-status status-excellent">EXCELLENT</div>
+                    </div>
+
+                    <div class="metric-card optimal">
+                        <div class="metric-label">Write Latency</div>
+                        <div class="metric-value">2.16</div>
+                        <div class="metric-unit">milliseconds (avg)</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 22%"></div>
+                        </div>
+                        <div class="metric-status status-excellent">EXCELLENT</div>
+                    </div>
+
+                    <div class="metric-card optimal">
+                        <div class="metric-label">Storage</div>
+                        <div class="metric-value">N/A</div>
+                        <div class="metric-unit">Not configured</div>
+                        <div class="metric-status status-good">NEEDS CONFIG</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Metrics Table -->
+            <div class="section table-section">
+                <h2 class="section-title">Detailed Metrics Summary</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Component</th>
+                            <th>Average</th>
+                            <th>Maximum</th>
+                            <th>Unit</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CPU Utilization</strong></td>
+                            <td>EC2 (i-0e85d055435ad091e)</td>
+                            <td>18.55%</td>
+                            <td>87.98%</td>
+                            <td>Percent</td>
+                            <td><span style="color: #10b981; font-weight: 600;">OPTIMAL</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>CPU Utilization</strong></td>
+                            <td>RDS (Aurora MySQL)</td>
+                            <td>52.50%</td>
+                            <td>99.47%</td>
+                            <td>Percent</td>
+                            <td><span style="color: #f59e0b; font-weight: 600;">ACCEPTABLE</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Network In</strong></td>
+                            <td>EC2</td>
+                            <td>48.5 MB/s</td>
+                            <td>115.9 MB/s</td>
+                            <td>Bytes/s</td>
+                            <td><span style="color: #10b981; font-weight: 600;">NORMAL</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Network Out</strong></td>
+                            <td>EC2</td>
+                            <td>7.7 MB/s</td>
+                            <td>16.8 MB/s</td>
+                            <td>Bytes/s</td>
+                            <td><span style="color: #10b981; font-weight: 600;">NORMAL</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database Connections</strong></td>
+                            <td>RDS</td>
+                            <td>182 connections</td>
+                            <td>242 connections</td>
+                            <td>Count</td>
+                            <td><span style="color: #3b82f6; font-weight: 600;">75% UTILIZED</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Read Latency</strong></td>
+                            <td>RDS</td>
+                            <td>1.68 ms</td>
+                            <td>2.46 ms</td>
+                            <td>Milliseconds</td>
+                            <td><span style="color: #10b981; font-weight: 600;">EXCELLENT</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Write Latency</strong></td>
+                            <td>RDS</td>
+                            <td>2.16 ms</td>
+                            <td>3.28 ms</td>
+                            <td>Milliseconds</td>
+                            <td><span style="color: #10b981; font-weight: 600;">EXCELLENT</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status Checks</strong></td>
+                            <td>EC2</td>
+                            <td>0 failures</td>
+                            <td>0 failures</td>
+                            <td>Count</td>
+                            <td><span style="color: #10b981; font-weight: 600;">HEALTHY</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="recommendations">
+                <h3>Recommendations & Action Items</h3>
+                <ul>
+                    <li><strong>Database CPU Monitoring:</strong> RDS CPU averages 52.5% with peaks at 99.47%. Monitor load distribution during peak hours and consider query optimization if spikes are due to inefficient queries.</li>
+                    <li><strong>Connection Pool Optimization:</strong> Database is utilizing 75% of available connections (182/242). This leaves adequate headroom but ensure connection pooling is properly configured to prevent exhaustion during traffic spikes.</li>
+                    <li><strong>Storage Configuration:</strong> Enable CloudWatch metrics for RDS storage usage to track growth trends and plan capacity expansion.</li>
+                    <li><strong>EC2 Instance Headroom:</strong> EC2 CPU averaging only 18.55% indicates good capacity for traffic growth. Instance can handle up to 40% additional load before reaching concerning levels.</li>
+                    <li><strong>Latency Performance:</strong> Both read (1.68ms) and write (2.16ms) latencies are excellent and well below typical thresholds. No action required.</li>
+                    <li><strong>HotSale Readiness:</strong> Infrastructure appears ready for 40% traffic increase based on current utilization patterns.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>Smartpost Performance Report | Generated: 2026-04-29 18:47 UTC</span>
+            <span>Data Period: 24 Hours | Source: AWS CloudWatch</span>
+        </div>
+    </div>
+</body>
+</html>
